@@ -184,6 +184,31 @@ constexpr chessman chessman_from_index(int i) {
     return static_cast<chessman>(i + 1);
 }
 
+chessman chessman_from_char(char c) {
+    switch (c) {
+        case 'Q':
+        case 'q':
+            return chessman::queen;
+        case 'R':
+        case 'r':
+            return chessman::rook;
+        case 'B':
+        case 'b':
+            return chessman::bishop;
+        case 'N':
+        case 'n':
+            return chessman::knight;
+        case 'K':
+        case 'k':
+            return chessman::king;
+        case 'P':
+        case 'p':
+            return chessman::pawn;
+        default:
+            throw std::logic_error("No such figure");
+    }
+}
+
 void parse(const string &filename) {
     cout << "opening file " << filename << "\n";
     using std::ifstream;
@@ -191,44 +216,49 @@ void parse(const string &filename) {
     if (!in) {
         throw std::invalid_argument("File does not exist");
     }
-    cout << "creating regex\n";
-    try {
-        std::regex re("(?:^$)|(?:^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$)");
-        cout << "regex created\n";
-        std::smatch m;
-        for (string line; std::getline(in, line);) {
-            cout << "line: " << line << "\n";
-            if (!std::regex_match(line, m, re)) {
-                throw std::invalid_argument("Invalid figure");
-            }
+//    cout << "creating regex\n";
+//    std::regex re("^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$", std::regex_constants::basic);
+//    cout << "regex created\n";
+//    std::smatch m;
+    for (string line; std::getline(in, line);) {
 
-            int count = 1;
-            if (m[1].matched) {
-                count = static_cast<int>(std::stoul(string(m[1].first, m[1].second)));
-            }
+        cout << "line: " << line << "\n";
+//        if (!std::regex_match(line, m, re)) {
+//            throw std::invalid_argument("Invalid figure");
+//        }
+        std::istringstream ss(line);
+        std::string s;
+        ss >> s;
 
-            chessman f;
-
-            if (m[2].matched) {
-                f = chessman::queen;
-            } else if (m[3].matched) {
-                f = chessman::rook;
-            } else if (m[4].matched) {
-                f = chessman::bishop;
-            } else if (m[5].matched) {
-                f = chessman::knight;
-            } else if (m[6].matched) {
-                f = chessman::king;
-            } else if (m[7].matched) {
-                f = chessman::pawn;
-            } else {
-                throw std::logic_error("No such figure");
-            }
-
-            figures[chessman_index(f)] += count;
+        int count = 1;
+        auto index = s.find('*');
+        if (index != std::string::npos) {
+            count = static_cast<int>(std::stoul(s.substr(0, index)));
+            s = s.substr(index + 1);
         }
-    } catch (std::regex_error e) {
-        cout << e.what();
+        if (s.size() != 1) {
+            throw std::invalid_argument("Invalid figure");
+        }
+
+        chessman f = chessman_from_char(s[0]);
+
+//        if (m[2].matched) {
+//            f = chessman::queen;
+//        } else if (m[3].matched) {
+//            f = chessman::rook;
+//        } else if (m[4].matched) {
+//            f = chessman::bishop;
+//        } else if (m[5].matched) {
+//            f = chessman::knight;
+//        } else if (m[6].matched) {
+//            f = chessman::king;
+//        } else if (m[7].matched) {
+//            f = chessman::pawn;
+//        } else {
+//            throw std::logic_error("No such figure");
+//        }
+
+        figures[chessman_index(f)] += count;
     }
 }
 
