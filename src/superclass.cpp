@@ -190,9 +190,10 @@ void parse(const string &filename) {
     if (!in) {
         throw std::invalid_argument("File does not exist");
     }
-    std::regex re("^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$");
+    std::regex re("(?:^$)|(?:^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$)");
     std::smatch m;
     for (string line; std::getline(in, line);) {
+        cout << "line: " << line << "\n";
         if (!std::regex_match(line, m, re)) {
             throw std::invalid_argument("Invalid figure");
         }
