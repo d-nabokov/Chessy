@@ -11,7 +11,7 @@
 
 using std::cout;
 using std::string;
-static const int SIZE = 8;
+static const int SIZE = 3;
 
 enum class chessman : unsigned char {
     empty = 0,
@@ -428,25 +428,12 @@ void recursive_solve(std::vector<i_solution> *solutions, int f_number) {
     }
 }
 
-std::vector<i_solution> solve(chessman field[SIZE][SIZE]) {
+std::vector<i_solution> solve() {
     int sum = 0;
     for (int i = 0; i < CHESSMAN_TYPES; ++i) {
         sum += figures[i];
         indexes[i] = sum;
     }
-
-
-    // *********************************
-    for (int i = 0; i < CHESSMAN_TYPES; ++i) {
-        cout << figures[i] << " ";
-    }
-    cout << "\n";
-    for (int i = 0; i < CHESSMAN_TYPES; ++i) {
-        cout << indexes[i] << " ";
-    }
-    cout << "\n";
-    // *********************************
-
 
     std::vector<i_solution> solutions;
     if (sum != 0) {
@@ -460,14 +447,14 @@ std::vector<i_solution> solve(chessman field[SIZE][SIZE]) {
 }
 
 int main() {
-    parse("input");
-    std::vector<i_solution> solutions = solve(field);
+
+
+    parse("../src/input");
+    std::vector<i_solution> solutions = solve();
     for (const auto &s : solutions) {
         cout << s << "\n";
     }
 
-
-//    std::list<int> t = {1, 1, 2, 1, 1, 3}, *l = &t;
 
 
     return 0;
