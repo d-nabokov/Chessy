@@ -194,41 +194,41 @@ void parse(const string &filename) {
     cout << "creating regex\n";
     try {
         std::regex re("(?:^$)|(?:^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$)");
+        cout << "regex created\n";
+        std::smatch m;
+        for (string line; std::getline(in, line);) {
+            cout << "line: " << line << "\n";
+            if (!std::regex_match(line, m, re)) {
+                throw std::invalid_argument("Invalid figure");
+            }
+
+            int count = 1;
+            if (m[1].matched) {
+                count = static_cast<int>(std::stoul(string(m[1].first, m[1].second)));
+            }
+
+            chessman f;
+
+            if (m[2].matched) {
+                f = chessman::queen;
+            } else if (m[3].matched) {
+                f = chessman::rook;
+            } else if (m[4].matched) {
+                f = chessman::bishop;
+            } else if (m[5].matched) {
+                f = chessman::knight;
+            } else if (m[6].matched) {
+                f = chessman::king;
+            } else if (m[7].matched) {
+                f = chessman::pawn;
+            } else {
+                throw std::logic_error("No such figure");
+            }
+
+            figures[chessman_index(f)] += count;
+        }
     } catch (std::regex_error e) {
         cout << e.what();
-    }
-    cout << "regex created\n";
-    std::smatch m;
-    for (string line; std::getline(in, line);) {
-        cout << "line: " << line << "\n";
-        if (!std::regex_match(line, m, re)) {
-            throw std::invalid_argument("Invalid figure");
-        }
-
-        int count = 1;
-        if (m[1].matched) {
-            count = static_cast<int>(std::stoul(string(m[1].first, m[1].second)));
-        }
-
-        chessman f;
-
-        if (m[2].matched) {
-            f = chessman::queen;
-        } else if (m[3].matched) {
-            f = chessman::rook;
-        } else if (m[4].matched) {
-            f = chessman::bishop;
-        } else if (m[5].matched) {
-            f = chessman::knight;
-        } else if (m[6].matched) {
-            f = chessman::king;
-        } else if (m[7].matched) {
-            f = chessman::pawn;
-        } else {
-            throw std::logic_error("No such figure");
-        }
-
-        figures[chessman_index(f)] += count;
     }
 }
 
