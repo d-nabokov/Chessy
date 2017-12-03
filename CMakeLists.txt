@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.2)
 
 # Download and unpack googletest at configure time
-configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
+configure_file(thirdparty/gtest/CMakeLists.txt googletest-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
         WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
@@ -33,9 +33,9 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES src/main.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 set(TEST_PROJECT_NAME tests)
-add_executable(${TEST_PROJECT_NAME} tests.cpp)
+add_executable(${TEST_PROJECT_NAME} test/tests.cpp)
 target_link_libraries(${TEST_PROJECT_NAME} gtest gtest_main)
