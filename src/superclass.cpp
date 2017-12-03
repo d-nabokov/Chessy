@@ -191,7 +191,13 @@ void parse(const string &filename) {
     if (!in) {
         throw std::invalid_argument("File does not exist");
     }
-    std::regex re("(?:^$)|(?:^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$)");
+    cout << "creating regex\n";
+    try {
+        std::regex re("(?:^$)|(?:^(?:(\\d+)\\*)?(?:([qQ])|([rR])|([bB])|([nN])|([kK])|([pP]))(?: ([wb]))?$)");
+    } catch (std::regex_error e) {
+        cout << e.what();
+    }
+    cout << "regex created\n";
     std::smatch m;
     for (string line; std::getline(in, line);) {
         cout << "line: " << line << "\n";
