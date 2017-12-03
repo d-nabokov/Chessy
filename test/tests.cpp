@@ -4,13 +4,25 @@
 namespace {
 
 TEST(board3x3, kek1) {
-    chessy::parse("test/data/3x3/001");
+    chessy::parse("../test/data/3x3/001");
     std::vector<chessy::i_solution> solutions = chessy::solve();
     ASSERT_EQ(2, solutions.size());
 }
 
 TEST(board3x3, kek2) {
     chessy::parse("test/data/3x3/002");
+    std::vector<chessy::i_solution> solutions = chessy::solve();
+    ASSERT_EQ(0, solutions.size());
+}
+
+TEST(board3x3, kek3) {
+    chessy::parse("../../test/data/3x3/002");
+    std::vector<chessy::i_solution> solutions = chessy::solve();
+    ASSERT_EQ(0, solutions.size());
+}
+
+TEST(board3x3, kek4) {
+    chessy::parse("../../../test/data/3x3/002");
     std::vector<chessy::i_solution> solutions = chessy::solve();
     ASSERT_EQ(0, solutions.size());
 }
