@@ -185,6 +185,7 @@ constexpr chessman chessman_from_index(int i) {
 }
 
 void parse(const string &filename) {
+    cout << "opening file " << filename << "\n";
     using std::ifstream;
     ifstream in(filename);
     if (!in) {
