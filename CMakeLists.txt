@@ -28,12 +28,14 @@ endif()
 # Now simply link your own targets against gtest, gmock,
 # etc. as appropriate
 
-project(Chessy)
+set(PROJECT_NAME chessy)
+project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.cpp)
-add_executable(Chessy ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-add_executable(Tests tests.cpp)
-target_link_libraries(Tests gtest gtest_main)
+set(TEST_PROJECT_NAME tests)
+add_executable(${TEST_PROJECT_NAME} tests.cpp)
+target_link_libraries(${TEST_PROJECT_NAME} gtest gtest_main)
