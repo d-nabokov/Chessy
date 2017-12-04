@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <unordered_map>
+#include "chessman.h"
 
 namespace chessy {
 
@@ -39,6 +40,7 @@ public:
     bool operator==(const solution &other) const;
 
     static std::vector<solution> remove_duplicates(std::vector<solution> *l);
+    static solution get_solution(const chessman **field, int size);
 
 private:
     map_t m;

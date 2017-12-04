@@ -87,4 +87,16 @@ bool solution::find_chessman(const C &x, const C &y, chessman f, const solution 
     return !((it == other.m.end()) || (it->second != f));
 }
 
+static solution solution::get_solution(const chessman **field, int size) {
+    solution s;
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if (field[i][j] != chessman::empty) {
+                s.add_figure(i, j, field[i][j]);
+            }
+        }
+    }
+    return s;
+}
+
 }

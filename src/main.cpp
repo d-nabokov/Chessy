@@ -1,5 +1,6 @@
-#include "superclass.cpp"
 
+
+#include <iostream>
 
 int main() {
     chessy::parse("../src/input");

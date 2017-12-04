@@ -33,7 +33,7 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES src/main.cpp src/board.cpp src/io_interface.cpp src/solution.cpp src/solver.cpp)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 set(TEST_PROJECT_NAME tests)

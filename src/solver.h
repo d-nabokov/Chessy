@@ -1,40 +1,35 @@
 #ifndef CHESSY_SOLVER_H
 #define CHESSY_SOLVER_H
 
+#include <vector>
+#include <iostream>
 #include "chessman.h"
-#include "board_checker.h"
+#include "board.h"
+#include "solution.h"
 
 class solver {
     int size_;
-    chessman **field;
-    chessy::board_checker board_checker_;
+    chessy::board board_checker_;
+    int indexes[chessy::CHESSMAN_TYPES];
 public:
     using chessy::chessman;
+    using chessy::i_solution;
+
     solver(int size)
         : size_(size), board_checker_(size)
     {
-        field = new chessman*[size];
-        for (int i = 0; i < size; ++i) {
-            field[i] = new chessman[size];
-            // TODO
-            std::memset(field[i], static_cast<int>(chessman::empty), size * sizeof(**field));
-        }
     }
 
-    ~solver() {
-        for (int i = 0; i < size; ++i) {
-            delete[] field[i];
-        }
-        delete[] field;
-    }
-
+    ~solver() = default;
 
     unsigned long long int recursive_count = 0;
 
     std::vector<i_solution> solve(const std::shared_ptr<int> &f) {
-        int *figures = figures.get();
+        reset();
+
+        int *figures = f.get();
         int sum = 0;
-        for (int i = 0; i < CHESSMAN_TYPES; ++i) {
+        for (int i = 0; i < chessy::CHESSMAN_TYPES; ++i) {
             sum += figures[i];
             indexes[i] = sum;
         }
@@ -43,18 +38,24 @@ public:
         if (sum != 0) {
             recursive_solve(&solutions, 0);
         }
-        cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
+        std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
         solutions = i_solution::remove_duplicates(&solutions);
-        cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
-        cout << "RECURSIVE CALLS = " << recursive_count << "\n";
+        std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
+        std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
         return solutions;
+    }
+
+private:
+    void reset() {
+        std::memset(indexes, 0, chessy::CHESSMAN_TYPES * sizeof(*indexes));
+        board_checker_.reset();
     }
 
     void recursive_solve(std::vector<i_solution> *solutions, int f_number) {
         ++recursive_count;
         // TODO сделать условием "f_number == chessman_count() - 1" и не делать одну рекурсию лишнюю
         if (f_number == chessman_count()) {
-            solutions->push_back(get_solution());
+            solutions->push_back(i_solution::get_solution(field, size_));
             return;
         }
 
@@ -67,9 +68,9 @@ public:
         while (indexes[chessman_index] <= f_number) {
             ++chessman_index;
         }
-        chessman f = chessman_from_index(chessman_index);
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
+        chessman f = chessy::chessman_from_index(chessman_index);
+        for (int i = 0; i < size_; ++i) {
+            for (int j = 0; j < size_; ++j) {
                 if (check_chessman(i, j, f)) {
                     set_chessman(i, j, f);
                     recursive_solve(solutions, f_number + 1);
@@ -79,42 +80,8 @@ public:
         }
     }
 
-    i_solution get_solution() {
-        i_solution s;
-        for (int i = 0; i < SIZE; ++i) {
-            for (int j = 0; j < SIZE; ++j) {
-                if (field[i][j] != chessman::empty) {
-                    s.add_figure(i, j, field[i][j]);
-                }
-            }
-        }
-        return s;
-    }
-
-    void set_chessman(int x, int y, chessman f) {
-        field[x][y] = f;
-        if (f == chessman::queen || f == chessman::rook) {
-            horizontal[x] = true;
-            vertical[y] = true;
-        }
-
-        if (f == chessman::queen || f == chessman::bishop) {
-            asc_diagonal[asc_index(x, y)] = true;
-            desc_diagonal[desc_index(x, y)] = true;
-        }
-    }
-
-    void unset_chessman(int x, int y, chessman f) {
-        field[x][y] = chessman::empty;
-        if (f == chessman::queen || f == chessman::rook) {
-            horizontal[x] = false;
-            vertical[y] = false;
-        }
-
-        if (f == chessman::queen || f == chessman::bishop) {
-            asc_diagonal[asc_index(x, y)] = false;
-            desc_diagonal[desc_index(x, y)] = false;
-        }
+    int chessman_count() {
+        return indexes[chessy::CHESSMAN_TYPES - 1];
     }
 };
 

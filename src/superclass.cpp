@@ -16,11 +16,7 @@ static const int SIZE = 3;
 unsigned long long int iterations = 0;
 
 chessman field[SIZE][SIZE] = {chessman::empty};
-int indexes[CHESSMAN_TYPES] = {0};
 
-int chessman_count() {
-    return indexes[CHESSMAN_TYPES - 1];
-}
 
 
 }
