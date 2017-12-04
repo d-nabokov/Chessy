@@ -1,7 +1,11 @@
 #include "gtest/gtest.h"
-#include "../src/superclass.cpp"
+#include "../src/chessman.h"
 
 namespace {
+
+class Board3x3: public ::testing::Test {
+
+};
 
 TEST(board3x3, kek1) {
     chessy::parse("../test/data/3x3/001");
@@ -15,17 +19,17 @@ TEST(board3x3, kek2) {
     ASSERT_EQ(0, solutions.size());
 }
 
-//TEST(board3x3AAA, kek3) {
-//    chessy::parse("../test/data/3x3/003");
-//    std::vector<chessy::i_solution> solutions = chessy::solve();
-//    ASSERT_EQ(1, solutions.size());
-//}
+TEST(board3x3AAA, kek3) {
+    chessy::parse("../test/data/3x3/003");
+    std::vector<chessy::i_solution> solutions = chessy::solve();
+    ASSERT_EQ(1, solutions.size());
+}
 
-//TEST(board3x3, kek4) {
-//    chessy::parse("../test/data/3x3/004");
-//    std::vector<chessy::i_solution> solutions = chessy::solve();
-//    ASSERT_EQ(0, solutions.size());
-//}
+TEST(board3x3, kek4) {
+    chessy::parse("../test/data/3x3/004");
+    std::vector<chessy::i_solution> solutions = chessy::solve();
+    ASSERT_EQ(0, solutions.size());
+}
 
 }
 
