@@ -1,12 +1,19 @@
+#include <vector>
 #include "solution.h"
 
 namespace chessy {
 
-void solution::add_figure(const C &x, const C &y, chessman f) {
+template <class C>
+void solution<C>::add_figure(const C &x, const C &y, chessman f) {
     m[std::make_pair(x, y)] = f;
 }
 
-bool solution::operator==(const solution &other) const {
+template <class C>
+bool solution<C>::operator==(const solution &other) const {
+    if (size_ != other.size_) {
+        return false;
+    }
+
     static const int variations_count = 8;
     bool variations[variations_count];
     // TODO массив с преобразованными координатами, и итерироваться по нему
@@ -21,27 +28,27 @@ bool solution::operator==(const solution &other) const {
             variations[0] = false;
         }
         // 90 rotation
-        if (variations[1] && !find_chessman(SIZE - 1 - c.second, c.first, p.second, other)) {
+        if (variations[1] && !find_chessman(size_ - 1 - c.second, c.first, p.second, other)) {
             variations[1] = false;
         }
         // 180 rotation
-        if (variations[2] && !find_chessman(SIZE - 1 - c.first, SIZE - 1 - c.second, p.second, other)) {
+        if (variations[2] && !find_chessman(size_ - 1 - c.first, size_ - 1 - c.second, p.second, other)) {
             variations[2] = false;
         }
         // 270 rotation
-        if (variations[3] && !find_chessman(c.second, SIZE - 1 - c.first, p.second, other)) {
+        if (variations[3] && !find_chessman(c.second, size_ - 1 - c.first, p.second, other)) {
             variations[3] = false;
         }
         // horizontal reflection
-        if (variations[4] && !find_chessman(SIZE - 1 - c.first, c.second, p.second, other)) {
+        if (variations[4] && !find_chessman(size_ - 1 - c.first, c.second, p.second, other)) {
             variations[4] = false;
         }
         // vertical reflection
-        if (variations[5] && !find_chessman(c.first, SIZE - 1 - c.second, p.second, other)) {
+        if (variations[5] && !find_chessman(c.first, size_ - 1 - c.second, p.second, other)) {
             variations[5] = false;
         }
         // asc diagonal reflection
-        if (variations[6] && !find_chessman(SIZE - 1 - c.second, SIZE - 1 - c.first, p.second, other)) {
+        if (variations[6] && !find_chessman(size_ - 1 - c.second, size_ - 1 - c.first, p.second, other)) {
             variations[6] = false;
         }
         // desc diagonal reflection
@@ -57,7 +64,8 @@ bool solution::operator==(const solution &other) const {
     return false;
 }
 
-static std::vector<solution> solution::remove_duplicates(std::vector<solution> *l) {
+template <class C>
+std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>> *l) {
     std::vector<bool> dupl(l->size(), false);
 
     for (int i = 0; i + 1 < l->size(); ++i) {
@@ -82,13 +90,15 @@ static std::vector<solution> solution::remove_duplicates(std::vector<solution> *
 
 }
 
-bool solution::find_chessman(const C &x, const C &y, chessman f, const solution &other) const {
+template <class C>
+bool solution<C>::find_chessman(const C &x, const C &y, chessman f, const solution<C> &other) const {
     auto it = other.m.find(std::make_pair(x, y));
     return !((it == other.m.end()) || (it->second != f));
 }
 
-static solution solution::get_solution(const chessman **field, int size) {
-    solution s;
+template <class C>
+solution<C> solution<C>::get_solution(const chessman **field, int size) {
+    solution s(size);
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             if (field[i][j] != chessman::empty) {

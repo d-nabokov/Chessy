@@ -10,7 +10,10 @@ namespace chessy {
 template<class C>
 class solution {
 public:
-    solution() = default;
+    solution(int size)
+        : size_(size)
+    {
+    }
 
     solution(solution &&other) = default;
 
@@ -44,11 +47,10 @@ public:
 
 private:
     map_t m;
+    int size_;
 
     bool find_chessman(const C &x, const C &y, chessman f, const solution &other) const;
 };
-
-using i_solution = solution<int>;
 
 }
 

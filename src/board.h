@@ -13,16 +13,16 @@ class board {
     bool *desc_diagonal;
     const int size_;
 public:
-    using chessy::chessman;
-
     board(int size);
     ~board();
 
     void reset();
-    bool check_chessman(int x, int y, chessman f) const;
+    bool check_chessman(int x, int y, chessman f, int *figures) const;
 
     void set_chessman(int x, int y, chessman f);
     void unset_chessman(int x, int y, chessman f);
+
+    const chessman **get_field() const;
 
 private:
     constexpr int asc_index(int x, int y) const;

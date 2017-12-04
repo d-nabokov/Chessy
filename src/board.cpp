@@ -38,7 +38,7 @@ void board::reset() {
     std::memset(desc_diagonal, 0, (2 * size_ - 1) * sizeof(*desc_diagonal));
 }
 
-bool board::check_chessman(int x, int y, chessman f) const {
+bool board::check_chessman(int x, int y, chessman f, int *figures) const {
     if (field[x][y] != chessman::empty
         || horizontal[x]
         || vertical[y]
@@ -166,6 +166,10 @@ void board::unset_chessman(int x, int y, chessman f) {
         asc_diagonal[asc_index(x, y)] = false;
         desc_diagonal[desc_index(x, y)] = false;
     }
+}
+
+const chessman **board::get_field() const {
+    return const_cast<const chessman **>(field);
 }
 
 constexpr int board::asc_index(int x, int y) const {

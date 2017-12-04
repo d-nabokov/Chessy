@@ -1,8 +1,13 @@
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <sstream>
+
 #include "io_interface.h"
 
 namespace chessy {
 
-std::shared_ptr<int> io_interface::parse(const string &filename) const {
+std::shared_ptr<int> io_interface::parse(const std::string &filename) const {
     std::shared_ptr<int> f(new int[CHESSMAN_TYPES], std::default_delete<int[]>());
     int * figures = f.get();
     std::memset(figures, 0, CHESSMAN_TYPES * sizeof(*figures));
@@ -29,39 +34,39 @@ std::shared_ptr<int> io_interface::parse(const string &filename) const {
             throw std::invalid_argument("Invalid figure");
         }
 
-        chessman f = chessman_from_char(s[0]);
-        figures[chessman_index(f)] += count;
+        chessman figure = chessman_from_char(s[0]);
+        figures[chessman_index(figure)] += count;
     }
     return f;
 }
 
-void io_interface::print_debug() const {
-    std::cout << "*****START*****\n";
-    for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
-            std::cout << chessman_out(field[i][j]) << " ";
-        }
-        std::cout << "\n";
-    }
-    std::cout << "**\n";
-    for (int i = 0; i < SIZE; ++i) {
-        std::cout << horizontal[i] << " ";
-    }
-    std::cout << "\n";
-    for (int i = 0; i < SIZE; ++i) {
-        std::cout << vertical[i] << " ";
-    }
-    std::cout << "\n";
-    for (int i = 0; i < 2 * SIZE - 1; ++i) {
-        std::cout << asc_diagonal[i] << " ";
-    }
-    std::cout << "\n";
-    for (int i = 0; i < 2 * SIZE - 1; ++i) {
-        std::cout << desc_diagonal[i] << " ";
-    }
-    std::cout << "\n";
-    std::cout << "*****END*****" << std::endl;
-}
+//void io_interface::print_debug(const chessman **field, int size) const {
+//    std::cout << "*****START*****\n";
+//    for (int i = 0; i < size; ++i) {
+//        for (int j = 0; j < size; ++j) {
+//            std::cout << chessman_out(field[i][j]) << " ";
+//        }
+//        std::cout << "\n";
+//    }
+//    std::cout << "**\n";
+//    for (int i = 0; i < size; ++i) {
+//        std::cout << horizontal[i] << " ";
+//    }
+//    std::cout << "\n";
+//    for (int i = 0; i < size; ++i) {
+//        std::cout << vertical[i] << " ";
+//    }
+//    std::cout << "\n";
+//    for (int i = 0; i < 2 * size - 1; ++i) {
+//        std::cout << asc_diagonal[i] << " ";
+//    }
+//    std::cout << "\n";
+//    for (int i = 0; i < 2 * size - 1; ++i) {
+//        std::cout << desc_diagonal[i] << " ";
+//    }
+//    std::cout << "\n";
+//    std::cout << "*****END*****" << std::endl;
+//}
 
 chessman io_interface::chessman_from_char(char c) const {
     switch (c) {

@@ -7,17 +7,17 @@
 #include "board.h"
 #include "solution.h"
 
+namespace chessy {
+
 class solver {
     int size_;
-    chessy::board board_checker_;
-    int indexes[chessy::CHESSMAN_TYPES];
+    board board_;
+    int indexes[CHESSMAN_TYPES];
 public:
-    using chessy::chessman;
-    using chessy::i_solution;
+    using i_solution = solution<int>;
 
     solver(int size)
-        : size_(size), board_checker_(size)
-    {
+            : size_(size), board_(size) {
     }
 
     ~solver() = default;
@@ -29,14 +29,14 @@ public:
 
         int *figures = f.get();
         int sum = 0;
-        for (int i = 0; i < chessy::CHESSMAN_TYPES; ++i) {
+        for (int i = 0; i < CHESSMAN_TYPES; ++i) {
             sum += figures[i];
             indexes[i] = sum;
         }
 
         std::vector<i_solution> solutions;
         if (sum != 0) {
-            recursive_solve(&solutions, 0);
+            recursive_solve(&solutions, 0, figures);
         }
         std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
         solutions = i_solution::remove_duplicates(&solutions);
@@ -47,15 +47,15 @@ public:
 
 private:
     void reset() {
-        std::memset(indexes, 0, chessy::CHESSMAN_TYPES * sizeof(*indexes));
-        board_checker_.reset();
+        std::memset(indexes, 0, CHESSMAN_TYPES * sizeof(*indexes));
+        board_.reset();
     }
 
-    void recursive_solve(std::vector<i_solution> *solutions, int f_number) {
+    void recursive_solve(std::vector<i_solution> *solutions, int f_number, int *figures) {
         ++recursive_count;
         // TODO сделать условием "f_number == chessman_count() - 1" и не делать одну рекурсию лишнюю
         if (f_number == chessman_count()) {
-            solutions->push_back(i_solution::get_solution(field, size_));
+            solutions->push_back(i_solution::get_solution(board_.get_field(), size_));
             return;
         }
 
@@ -68,22 +68,24 @@ private:
         while (indexes[chessman_index] <= f_number) {
             ++chessman_index;
         }
-        chessman f = chessy::chessman_from_index(chessman_index);
+        chessman f = chessman_from_index(chessman_index);
         for (int i = 0; i < size_; ++i) {
             for (int j = 0; j < size_; ++j) {
-                if (check_chessman(i, j, f)) {
-                    set_chessman(i, j, f);
-                    recursive_solve(solutions, f_number + 1);
-                    unset_chessman(i, j, f);
+                if (board_.check_chessman(i, j, f, figures)) {
+                    board_.set_chessman(i, j, f);
+                    recursive_solve(solutions, f_number + 1, figures);
+                    board_.unset_chessman(i, j, f);
                 }
             }
         }
     }
 
     int chessman_count() {
-        return indexes[chessy::CHESSMAN_TYPES - 1];
+        return indexes[CHESSMAN_TYPES - 1];
     }
 };
+
+}
 
 
 #endif //CHESSY_SOLVER_H
