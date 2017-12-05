@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 #include "io_interface.h"
 
