@@ -14,6 +14,7 @@ class solver {
     int size_;
     board board_;
     int indexes[CHESSMAN_TYPES];
+    int chessman_count_;
 public:
     using i_solution = solution<int>;
 
@@ -28,7 +29,7 @@ public:
 private:
     void reset();
 
-    void recursive_solve(std::vector<i_solution> *solutions, int f_number, int *figures);
+    void recursive_solve(std::vector<i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x);
 
     int chessman_count();
 };

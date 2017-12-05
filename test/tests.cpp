@@ -89,9 +89,9 @@ TEST(queens, test3) {
     assert_solutions_size(7, "queens/003", 6);
 }
 
-//TEST(queens, test4) {
-//    assert_solutions_size(8, "queens/004", 12);
-//}
+TEST(queens, test4) {
+    assert_solutions_size(8, "queens/004", 12);
+}
 
 } // queens namespace
 

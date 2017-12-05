@@ -15,10 +15,10 @@ bool solution<C>::operator==(const solution &other) const {
 
     static const int variations_count = 8;
     bool variations[variations_count];
-    // TODO массив с преобразованными координатами, и итерироваться по нему
     for (int i = 0; i < variations_count; ++i) {
         variations[i] = true;
     }
+    // TODO массив с преобразованными координатами, и итерироваться по нему ???
 
     for (const auto &p : m) {
         coordinate_t c = p.first;
