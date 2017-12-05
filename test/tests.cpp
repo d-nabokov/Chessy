@@ -69,13 +69,31 @@ TEST(board3x3, test12) {
 }
 
 TEST(board3x3, test13) {
-//    auto solutions = get_solutions(3, "3x3/013");
-//    i.print_solution(std::cout, solutions);
     assert_solutions_size(3, "3x3/013", 1);
 }
 
 
 } // board3x3 namespace
+
+namespace queens {
+
+TEST(queens, test1) {
+    assert_solutions_size(5, "queens/001", 2);
+}
+
+TEST(queens, test2) {
+    assert_solutions_size(6, "queens/002", 1);
+}
+
+TEST(queens, test3) {
+    assert_solutions_size(7, "queens/003", 6);
+}
+
+//TEST(queens, test4) {
+//    assert_solutions_size(8, "queens/004", 12);
+//}
+
+} // queens namespace
 
 } // namespace
 
