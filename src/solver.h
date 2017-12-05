@@ -2,6 +2,7 @@
 #define CHESSY_SOLVER_H
 
 #include <vector>
+#include <memory>
 #include <iostream>
 #include "chessman.h"
 #include "board.h"
