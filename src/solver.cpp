@@ -1,4 +1,5 @@
 #include "solver.h"
+#include <cstring>
 
 namespace chessy {
 
