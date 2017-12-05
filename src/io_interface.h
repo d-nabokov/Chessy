@@ -9,6 +9,7 @@ namespace chessy {
 class io_interface {
 public:
     std::shared_ptr<int> parse(const std::string &filename) const;
+    void print_solution(std::ostream &os, const solution<int> &s) const;
 //    void print_debug() const;
 
 private:

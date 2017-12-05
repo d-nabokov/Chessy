@@ -31,6 +31,8 @@ public:
 
     void add_figure(const C &x, const C &y, chessman f);
 
+    std::vector<std::pair<coordinate_t, chessman>> get_figures() const;
+
     // TODO возвращать список координат с фигурой
 //    friend std::ostream &operator<<(std::ostream &os, const solution &s) {
 //        os << "******SOLUTION******\n";

@@ -108,6 +108,15 @@ solution<C> solution<C>::get_solution(const chessman **field, int size) {
     return s;
 }
 
+template <class C>
+std::vector<std::pair<typename solution<C>::coordinate_t, chessman>> solution<C>::get_figures() const {
+    std::vector<std::pair<coordinate_t, chessman>> ret(m.size());
+    for (const auto &p : m) {
+        ret.push_back(p);
+    }
+    return ret;
+}
+
 template class solution<int>;
 
 }

@@ -1,39 +1,84 @@
-//#include "gtest/gtest.h"
-//#include "../src/chessman.h"
-//
-//namespace {
-//
-//class Board3x3: public ::testing::Test {
-//
-//};
-//
-//TEST(board3x3, kek1) {
-//    chessy::parse("../test/data/3x3/001");
-//    std::vector<chessy::i_solution> solutions = chessy::solve();
-//    ASSERT_EQ(2, solutions.size());
-//}
-//
-//TEST(board3x3, kek2) {
-//    chessy::parse("../test/data/3x3/002");
-//    std::vector<chessy::i_solution> solutions = chessy::solve();
-//    ASSERT_EQ(0, solutions.size());
-//}
-//
-//TEST(board3x3AAA, kek3) {
-//    chessy::parse("../test/data/3x3/003");
-//    std::vector<chessy::i_solution> solutions = chessy::solve();
-//    ASSERT_EQ(1, solutions.size());
-//}
-//
-//TEST(board3x3, kek4) {
-//    chessy::parse("../test/data/3x3/004");
-//    std::vector<chessy::i_solution> solutions = chessy::solve();
-//    ASSERT_EQ(0, solutions.size());
-//}
-//
-//}
-//
-//int main(int argc, char **argv) {
-//    ::testing::InitGoogleTest(&argc, argv);
-//    return RUN_ALL_TESTS();
-//}
+#include "gtest/gtest.h"
+#include "../src/io_interface.h"
+#include "../src/solver.h"
+
+namespace {
+
+using chessy::solver;
+chessy::io_interface i;
+
+std::vector<solver::i_solution> get_solutions(int size, const std::string &filename) {
+    chessy::solver s(size);
+    return s.solve(i.parse("../test/data/" + filename));
+}
+
+void assert_solutions_size(int board_size, const std::string &filename, int solutions_size) {
+    auto solutions = get_solutions(board_size, filename);
+    ASSERT_EQ(solutions_size, solutions.size());
+}
+
+namespace board3x3 {
+
+TEST(board3x3, test1) {
+    assert_solutions_size(3, "3x3/001", 2);
+}
+
+TEST(board3x3, test2) {
+    assert_solutions_size(3, "3x3/002", 0);
+}
+
+TEST(board3x3, test3) {
+    assert_solutions_size(3, "3x3/003", 1);
+}
+
+TEST(board3x3, test4) {
+    assert_solutions_size(3, "3x3/004", 0);
+}
+
+TEST(board3x3, test5) {
+    assert_solutions_size(3, "3x3/005", 2);
+}
+
+TEST(board3x3, test6) {
+    assert_solutions_size(3, "3x3/006", 0);
+}
+
+TEST(board3x3, test7) {
+    assert_solutions_size(3, "3x3/007", 2);
+}
+
+TEST(board3x3, test8) {
+    assert_solutions_size(3, "3x3/008", 0);
+}
+
+TEST(board3x3, test9) {
+    assert_solutions_size(3, "3x3/009", 1);
+}
+
+TEST(board3x3, test10) {
+    assert_solutions_size(3, "3x3/010", 0);
+}
+
+TEST(board3x3, test11) {
+    assert_solutions_size(3, "3x3/011", 1);
+}
+
+TEST(board3x3, test12) {
+    assert_solutions_size(3, "3x3/012", 0);
+}
+
+TEST(board3x3, test13) {
+//    auto solutions = get_solutions(3, "3x3/013");
+//    i.print_solution(std::cout, solutions);
+    assert_solutions_size(3, "3x3/013", 1);
+}
+
+
+} // board3x3 namespace
+
+} // namespace
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
