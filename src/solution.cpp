@@ -1,4 +1,3 @@
-#include <vector>
 #include "solution.h"
 
 namespace chessy {
@@ -108,5 +107,7 @@ solution<C> solution<C>::get_solution(const chessman **field, int size) {
     }
     return s;
 }
+
+template class solution<int>;
 
 }

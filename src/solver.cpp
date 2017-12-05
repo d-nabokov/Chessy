@@ -23,7 +23,7 @@ std::vector<solver::i_solution> solver::solve(const std::shared_ptr<int> &f) {
         recursive_solve(&solutions, 0, figures);
     }
     std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
-    solutions = solver::i_solution::remove_duplicates(&solutions);
+    solutions = i_solution::remove_duplicates(&solutions);
     std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
     std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
     return solutions;
