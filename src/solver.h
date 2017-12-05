@@ -13,7 +13,7 @@ namespace chessy {
 class solver {
     int size_;
     board board_;
-    int indexes[CHESSMAN_TYPES];
+    int indexes_[CHESSMAN_TYPES];
     int chessman_count_;
 public:
     using i_solution = solution<int>;

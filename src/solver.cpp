@@ -16,7 +16,7 @@ std::vector<solver::i_solution> solver::solve(const std::shared_ptr<int> &f) {
     int sum = 0;
     for (int i = 0; i < CHESSMAN_TYPES; ++i) {
         sum += figures[i];
-        indexes[i] = sum;
+        indexes_[i] = sum;
     }
 
     chessman_count_ = chessman_count();
@@ -33,7 +33,7 @@ std::vector<solver::i_solution> solver::solve(const std::shared_ptr<int> &f) {
 }
 
 void solver::reset() {
-    std::memset(indexes, 0, CHESSMAN_TYPES * sizeof(*indexes));
+    std::memset(indexes_, 0, CHESSMAN_TYPES * sizeof(*indexes_));
     board_.reset();
 }
 
@@ -49,9 +49,8 @@ void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_n
 
     // TODO передавать предыдущую фигуру и её вертикальную координату. Если фигуры совпадают, то новую ставим не выше предыдущей
 
-    // TODO передавать index ??
     int chessman_index = prev_index;
-    while (indexes[chessman_index] <= f_number) {
+    while (indexes_[chessman_index] <= f_number) {
         ++chessman_index;
     }
     chessman f = chessman_from_index(chessman_index);
@@ -68,7 +67,7 @@ void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_n
 }
 
 int solver::chessman_count() {
-    return indexes[CHESSMAN_TYPES - 1];
+    return indexes_[CHESSMAN_TYPES - 1];
 }
 
 }
