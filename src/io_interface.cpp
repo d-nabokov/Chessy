@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstring>
+#include <memory>
 
 #include "io_interface.h"
 

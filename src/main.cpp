@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "io_interface.h"
 #include "solver.h"
 

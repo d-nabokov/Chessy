@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "../src/io_interface.h"
 #include "../src/solver.h"
+#include <memory>
 
 namespace {
 
