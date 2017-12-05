@@ -3,6 +3,7 @@
 
 #include "chessman.h"
 #include "solution.h"
+#include <memory>
 
 namespace chessy {
 

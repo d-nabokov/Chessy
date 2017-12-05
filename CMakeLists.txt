@@ -25,9 +25,6 @@ if(CMAKE_VERSION VERSION_LESS 2.8.11)
             "${gmock_SOURCE_DIR}/include")
 endif()
 
-# Now simply link your own targets against gtest, gmock,
-# etc. as appropriate
-
 set(PROJECT_NAME chessy)
 project(${PROJECT_NAME})
 
