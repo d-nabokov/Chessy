@@ -29,7 +29,7 @@ public:
 private:
     void reset();
 
-    void recursive_solve(std::vector<i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x);
+    void recursive_solve(std::vector<i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x, int prev_y);
 
     int chessman_count();
 };
