@@ -25,8 +25,8 @@ public:
     const chessman **get_field() const;
 
 private:
-    constexpr int asc_index(int x, int y) const;
-    constexpr int desc_index(int x, int y) const;
+    int asc_index(int x, int y) const;
+    int desc_index(int x, int y) const;
 };
 
 }

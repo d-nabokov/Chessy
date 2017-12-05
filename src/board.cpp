@@ -172,11 +172,11 @@ const chessman **board::get_field() const {
     return const_cast<const chessman **>(field);
 }
 
-constexpr int board::asc_index(int x, int y) const {
+int board::asc_index(int x, int y) const {
     return x + y;
 }
 
-constexpr int board::desc_index(int x, int y) const {
+int board::desc_index(int x, int y) const {
     return size_ - 1 + x - y;
 }
 
