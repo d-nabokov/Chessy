@@ -130,11 +130,6 @@ void io_interface::print_solution(std::ostream &os, const solution<int> &s) cons
         }
         os << "\n";
     }
-
-//    for (auto &&p : v) {
-//        auto coord = p.first;
-//        os << coord.first << " " << coord.second << " " << chessman_out(p.second) << "\n";
-//    }
 }
 
 }

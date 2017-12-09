@@ -56,7 +56,7 @@ bool solution<C>::operator==(const solution &other) const {
         }
     }
     if (variations[0]) {
-        throw std::logic_error("WTF HOW ARE THEY EQUAL?!??!?!?!");
+        throw std::logic_error("WTF HOW ARE THEY EQUAL?!");
     }
     for (int i = 0; i < variations_count; ++i) {
         if (variations[i]) {
@@ -113,16 +113,6 @@ solution<C> solution<C>::get_solution(const chessman **field, int size) {
 
 template <class C>
 const typename solution<C>::map_t &solution<C>::get_figures() const {
-//    std::vector<std::pair<coordinate_t, chessman>> ret(m_.size());
-//    auto m_it = m_.begin();
-//    auto v_it = ret.begin();
-//
-//    for (; m_it != m_.end(); ++m_it, ++v_it) {
-//        *v_it = *m_it;
-//    }
-//    for (const auto &p : m) {
-//        ret.push_back(p);
-//    }
     return m_;
 }
 
