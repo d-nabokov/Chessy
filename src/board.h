@@ -49,7 +49,7 @@ public:
     }
 
 protected:
-    constexpr int asc_index(int x, int y) const {
+    int asc_index(int x, int y) const {
         return x + y;
     }
     int desc_index(int x, int y) const {
