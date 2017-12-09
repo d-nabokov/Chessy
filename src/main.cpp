@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 #include "io_interface.h"
 #include "solver.h"
 
@@ -13,8 +12,6 @@ int main(int argc, char *argv[]) {
     auto figures = i.parse("../src/input");
     chessy::solver s(size);
     auto solutions = s.solve(figures);
-
-    std::cout << "SOLUTIONS = " << solutions.size() << "\n";
 
     for (const auto &s : solutions) {
         i.print_solution(std::cout, s);

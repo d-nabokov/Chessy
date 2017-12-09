@@ -119,7 +119,6 @@ void io_interface::print_solution(std::ostream &os, const solution<int> &s) cons
     solution<int>::map_t::const_iterator end = v.end();
     solution<int>::map_t::iterator it;
 
-    os << "SOLUTION:\n";
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             if ((it = v.find(std::make_pair(i, j))) != end) {
@@ -130,6 +129,7 @@ void io_interface::print_solution(std::ostream &os, const solution<int> &s) cons
         }
         os << "\n";
     }
+    os << "\n";
 }
 
 }
