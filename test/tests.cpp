@@ -3,19 +3,37 @@
 #include "../src/solver.h"
 #include "../src/colorless_board.h"
 #include <memory>
+#include <string>
 
 namespace {
+
+int factorial(int n) {
+    int ret = 1;
+    for (int i = n; i > 1; --i) {
+        ret *= i;
+    }
+    return ret;
+}
 
 using chessy::solver;
 chessy::io_interface i;
 
-std::vector<solver::i_solution> get_solutions(int size, const std::string &filename) {
+std::vector<solver::i_solution> get_solutions(int size, const std::string &filename, bool fundamental) {
     chessy::solver s(std::shared_ptr<chessy::board>(new chessy::colorless_board(size)));
-    return s.solve(i.parse("../test/data/" + filename));
+    if (fundamental) {
+        return s.solve(i.parse("../test/data/" + filename));
+    } else {
+        return s.solve_not_fundamental(i.parse("../test/data/" + filename));
+    }
 }
 
 void assert_solutions_size(int board_size, const std::string &filename, int solutions_size) {
-    auto solutions = get_solutions(board_size, filename);
+    auto solutions = get_solutions(board_size, filename, true);
+    ASSERT_EQ(solutions_size, solutions.size());
+}
+
+void assert_not_fundamental_solutions_size(int board_size, const std::string &filename, int solutions_size) {
+    auto solutions = get_solutions(board_size, filename, false);
     ASSERT_EQ(solutions_size, solutions.size());
 }
 
@@ -95,6 +113,19 @@ TEST(queens, test4) {
 }
 
 } // queens namespace
+
+namespace rooks {
+
+TEST(rooks, test1) {
+
+    for (int i = 1; i < 5; ++i) {
+        int n = i + 4;
+        assert_not_fundamental_solutions_size(n, "rooks/00" + std::to_string(i), factorial(n));
+    }
+
+}
+
+} // rooks namespace
 
 } // namespace
 

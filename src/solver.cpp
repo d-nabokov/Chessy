@@ -12,6 +12,13 @@ solver::solver(const std::shared_ptr<board> &b)
 unsigned long long int recursive_count = 0;
 
 std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
+    auto solutions = solve_not_fundamental(f);
+    solutions = i_solution::remove_duplicates(&solutions);
+    std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
+    return solutions;
+}
+
+std::vector<solver::i_solution> solver::solve_not_fundamental(const i_shared_ptr &f) {
     reset();
 
     int *figures = f.get();
@@ -29,8 +36,6 @@ std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
     }
     std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
     std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
-    solutions = i_solution::remove_duplicates(&solutions);
-    std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
     return solutions;
 }
 

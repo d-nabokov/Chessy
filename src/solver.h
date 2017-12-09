@@ -26,6 +26,7 @@ public:
     unsigned long long int recursive_count = 0;
 
     std::vector<i_solution> solve(const i_shared_ptr &f);
+    std::vector<i_solution> solve_not_fundamental(const i_shared_ptr &f);
 
 private:
     void reset();
