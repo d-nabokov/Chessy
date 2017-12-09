@@ -1,6 +1,7 @@
 #ifndef CHESSY_BOARD_CHECKER_H
 #define CHESSY_BOARD_CHECKER_H
 
+#include <cstring>
 #include "chessman.h"
 #include "solution.h"
 
