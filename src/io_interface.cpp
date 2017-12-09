@@ -8,8 +8,8 @@
 
 namespace chessy {
 
-std::shared_ptr<int> io_interface::parse(const std::string &filename) const {
-    std::shared_ptr<int> f(new int[CHESSMAN_TYPES], std::default_delete<int[]>());
+io_interface::i_shared_ptr io_interface::parse(const std::string &filename) const {
+    i_shared_ptr f(new int[CHESSMAN_TYPES], std::default_delete<int[]>());
     int * figures = f.get();
     std::memset(figures, 0, CHESSMAN_TYPES * sizeof(*figures));
 

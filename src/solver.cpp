@@ -3,14 +3,15 @@
 
 namespace chessy {
 
-solver::solver(int size, const std::shared_ptr<board> &board)
-        : size_(size), board_(board)
+solver::solver(const std::shared_ptr<board> &b)
+        : board_(b)
 {
+    size_ = board_->get_size();
 }
 
 unsigned long long int recursive_count = 0;
 
-std::vector<solver::i_solution> solver::solve(const std::shared_ptr<int> &f) {
+std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
     reset();
 
     int *figures = f.get();
@@ -26,10 +27,10 @@ std::vector<solver::i_solution> solver::solve(const std::shared_ptr<int> &f) {
     if (sum != 0) {
         recursive_solve(&solutions, 0, figures, 0, 0, -1);
     }
+    std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
     std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
     solutions = i_solution::remove_duplicates(&solutions);
     std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
-    std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
     return solutions;
 }
 

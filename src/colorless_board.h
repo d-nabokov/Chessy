@@ -5,7 +5,7 @@
 
 namespace chessy {
 
-class colorless_board : board {
+class colorless_board : public board {
     bool *horizontal;
     bool *vertical;
     bool *asc_diagonal;

@@ -43,8 +43,12 @@ public:
 
     virtual i_solution get_solution() = 0;
 
+    int get_size() const {
+        return size_;
+    }
+
 protected:
-    int asc_index(int x, int y) const {
+    constexpr int asc_index(int x, int y) const {
         return x + y;
     }
     int desc_index(int x, int y) const {

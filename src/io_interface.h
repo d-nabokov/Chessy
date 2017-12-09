@@ -10,8 +10,9 @@ namespace chessy {
 class io_interface {
 public:
     using i_solution = solution<int>;
+    using i_shared_ptr = std::shared_ptr<int>;
 
-    std::shared_ptr<int> parse(const std::string &filename) const;
+    i_shared_ptr parse(const std::string &filename) const;
     void print_solution(std::ostream &os, const i_solution &s) const;
 //    void print_debug() const;
 

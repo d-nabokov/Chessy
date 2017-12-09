@@ -3,6 +3,7 @@
 #include "io_interface.h"
 #include "solver.h"
 #include "colorless_board.h"
+#include "board.h"
 
 
 int main(int argc, char *argv[]) {
@@ -13,7 +14,7 @@ int main(int argc, char *argv[]) {
     chessy::io_interface i;
     auto figures = i.parse("../src/input");
     std::shared_ptr<chessy::board> b(new chessy::colorless_board(size));
-    chessy::solver s(size, b);
+    chessy::solver s(b);
     auto solutions = s.solve(figures);
 
     for (const auto &s : solutions) {

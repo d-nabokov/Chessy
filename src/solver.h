@@ -17,14 +17,15 @@ class solver {
     int chessman_count_;
 public:
     using i_solution = solution<int>;
+    using i_shared_ptr = std::shared_ptr<int>;
 
-    solver(int size, const std::shared_ptr<board> &board);
+    solver(const std::shared_ptr<board> &b);
 
     ~solver() = default;
 
     unsigned long long int recursive_count = 0;
 
-    std::vector<i_solution> solve(const std::shared_ptr<int> &f);
+    std::vector<i_solution> solve(const i_shared_ptr &f);
 
 private:
     void reset();
