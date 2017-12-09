@@ -7,6 +7,16 @@
 
 namespace {
 
+std::string test_name(unsigned n) {
+    if (n >= 1000) {
+        return "";
+    }
+    char buf[4];
+    sprintf(buf, "%03d", n);
+    buf[3] = '\0';
+    return buf;
+}
+
 int factorial(int n) {
     int ret = 1;
     for (int i = n; i > 1; --i) {
@@ -40,55 +50,10 @@ void assert_not_fundamental_solutions_size(int board_size, const std::string &fi
 namespace board3x3 {
 
 TEST(board3x3, test1) {
-    assert_solutions_size(3, "3x3/001", 2);
-}
-
-TEST(board3x3, test2) {
-    assert_solutions_size(3, "3x3/002", 0);
-}
-
-TEST(board3x3, test3) {
-    assert_solutions_size(3, "3x3/003", 1);
-}
-
-TEST(board3x3, test4) {
-    assert_solutions_size(3, "3x3/004", 0);
-}
-
-TEST(board3x3, test5) {
-    assert_solutions_size(3, "3x3/005", 2);
-}
-
-TEST(board3x3, test6) {
-    assert_solutions_size(3, "3x3/006", 0);
-}
-
-TEST(board3x3, test7) {
-    assert_solutions_size(3, "3x3/007", 2);
-}
-
-TEST(board3x3, test8) {
-    assert_solutions_size(3, "3x3/008", 0);
-}
-
-TEST(board3x3, test9) {
-    assert_solutions_size(3, "3x3/009", 1);
-}
-
-TEST(board3x3, test10) {
-    assert_solutions_size(3, "3x3/010", 0);
-}
-
-TEST(board3x3, test11) {
-    assert_solutions_size(3, "3x3/011", 1);
-}
-
-TEST(board3x3, test12) {
-    assert_solutions_size(3, "3x3/012", 0);
-}
-
-TEST(board3x3, test13) {
-    assert_solutions_size(3, "3x3/013", 1);
+    int solutions[] = {2, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1};
+    for (int i = 1; i < 14; ++i) {
+        assert_solutions_size(3, "3x3/" + test_name(i), solutions[i - 1]);
+    }
 }
 
 
@@ -97,19 +62,11 @@ TEST(board3x3, test13) {
 namespace queens {
 
 TEST(queens, test1) {
-    assert_solutions_size(5, "queens/001", 2);
-}
-
-TEST(queens, test2) {
-    assert_solutions_size(6, "queens/002", 1);
-}
-
-TEST(queens, test3) {
-    assert_solutions_size(7, "queens/003", 6);
-}
-
-TEST(queens, test4) {
-    assert_solutions_size(8, "queens/004", 12);
+    int solutions[] = {2, 1, 6, 12};
+    for (int i = 1; i < 4; ++i) {
+        int n = i + 4;
+        assert_solutions_size(n, "queens/" + test_name(i), solutions[i - 1]);
+    }
 }
 
 } // queens namespace
@@ -117,12 +74,10 @@ TEST(queens, test4) {
 namespace rooks {
 
 TEST(rooks, test1) {
-
-    for (int i = 1; i < 5; ++i) {
+    for (int i = 1; i < 4; ++i) {
         int n = i + 4;
-        assert_not_fundamental_solutions_size(n, "rooks/00" + std::to_string(i), factorial(n));
+        assert_not_fundamental_solutions_size(n, "rooks/" + test_name(i), factorial(n));
     }
-
 }
 
 } // rooks namespace

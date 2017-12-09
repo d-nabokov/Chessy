@@ -16,6 +16,8 @@ int main(int argc, char *argv[]) {
     chessy::solver solver(b);
     auto solutions = solver.solve_not_fundamental(figures);
 
+    printf("%03d", 1000);
+
 //    for (const auto &s : solutions) {
 //        i.print_solution(std::cout, s);
 //    }

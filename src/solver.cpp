@@ -46,15 +46,12 @@ void solver::reset() {
 
 void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x, int prev_y) {
     ++recursive_count;
-    // no : TODO сделать условием "f_number == chessman_count() - 1" и не делать одну рекурсию лишнюю
     if (f_number == chessman_count_) {
         solutions->push_back(board_->get_solution());
         return;
     }
 
 //    print_debug();
-
-    // TODO передавать предыдущую фигуру и её вертикальную координату. Если фигуры совпадают, то новую ставим не выше предыдущей
 
     int chessman_index = prev_index;
     while (indexes_[chessman_index] <= f_number) {
