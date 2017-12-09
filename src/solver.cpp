@@ -3,8 +3,9 @@
 
 namespace chessy {
 
-solver::solver(int size)
-        : size_(size), board_(size) {
+solver::solver(int size, const std::shared_ptr<board> &board)
+        : size_(size), board_(board)
+{
 }
 
 unsigned long long int recursive_count = 0;
@@ -34,14 +35,14 @@ std::vector<solver::i_solution> solver::solve(const std::shared_ptr<int> &f) {
 
 void solver::reset() {
     std::memset(indexes_, 0, CHESSMAN_TYPES * sizeof(*indexes_));
-    board_.reset();
+    board_->reset();
 }
 
 void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x, int prev_y) {
     ++recursive_count;
     // no : TODO сделать условием "f_number == chessman_count() - 1" и не делать одну рекурсию лишнюю
     if (f_number == chessman_count_) {
-        solutions->push_back(solver::i_solution::get_solution(board_.get_field(), size_));
+        solutions->push_back(board_->get_solution());
         return;
     }
 
@@ -64,10 +65,10 @@ void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_n
             j = 0;
         }
         for (; j < size_; ++j) {
-            if (board_.check_chessman(i, j, f, figures)) {
-                board_.set_chessman(i, j, f);
+            if (board_->check_chessman(i, j, f, figures)) {
+                board_->set_chessman(i, j, f);
                 recursive_solve(solutions, f_number + 1, figures, chessman_index, i, j);
-                board_.unset_chessman(i, j, f);
+                board_->unset_chessman(i, j, f);
             }
         }
     }

@@ -30,7 +30,7 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES src/board.cpp src/io_interface.cpp src/solution.cpp src/solver.cpp)
+set(SOURCE_FILES src/io_interface.cpp src/solution.cpp src/solver.cpp src/colorless_board.cpp)
 add_executable(${PROJECT_NAME} src/main.cpp ${SOURCE_FILES})
 
 set(TEST_PROJECT_NAME tests)

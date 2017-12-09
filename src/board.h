@@ -2,31 +2,54 @@
 #define CHESSY_BOARD_CHECKER_H
 
 #include "chessman.h"
+#include "solution.h"
 
 namespace chessy {
 
 class board {
+protected:
     chessman **field;
-    bool *horizontal;
-    bool *vertical;
-    bool *asc_diagonal;
-    bool *desc_diagonal;
     const int size_;
 public:
-    board(int size);
-    ~board();
+    using i_solution = solution<int>;
 
-    void reset();
-    bool check_chessman(int x, int y, chessman f, int *figures) const;
+    board(int size)
+        : size_(size)
+    {
+        field = new chessman*[size];
+        for (int i = 0; i < size; ++i) {
+            field[i] = new chessman[size];
+        }
+        board::reset();
+    }
 
-    void set_chessman(int x, int y, chessman f);
-    void unset_chessman(int x, int y, chessman f);
+    virtual ~board() {
+        for (int i = 0; i < size_; ++i) {
+            delete[] field[i];
+        }
+        delete[] field;
+    }
 
-    const chessman **get_field() const;
+    virtual void reset() {
+        for (int i = 0; i < size_; ++i) {
+            std::memset(field[i], static_cast<int>(chessman::empty), size_ * sizeof(**field));
+        }
+    }
 
-private:
-    int asc_index(int x, int y) const;
-    int desc_index(int x, int y) const;
+    virtual bool check_chessman(int x, int y, chessman f, int *figures) const = 0;
+
+    virtual void set_chessman(int x, int y, chessman f) = 0;
+    virtual void unset_chessman(int x, int y, chessman f) = 0;
+
+    virtual i_solution get_solution() = 0;
+
+protected:
+    int asc_index(int x, int y) const {
+        return x + y;
+    }
+    int desc_index(int x, int y) const {
+        return size_ - 1 + x - y;
+    }
 };
 
 }

@@ -98,18 +98,6 @@ bool solution<C>::find_chessman(const C &x, const C &y, chessman f, const soluti
     return !((it == other.m_.end()) || (it->second != f));
 }
 
-template <class C>
-solution<C> solution<C>::get_solution(const chessman **field, int size) {
-    solution s(size);
-    for (int i = 0; i < size; ++i) {
-        for (int j = 0; j < size; ++j) {
-            if (field[i][j] != chessman::empty) {
-                s.add_figure(i, j, field[i][j]);
-            }
-        }
-    }
-    return s;
-}
 
 template <class C>
 const typename solution<C>::map_t &solution<C>::get_figures() const {

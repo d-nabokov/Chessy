@@ -12,13 +12,13 @@ namespace chessy {
 
 class solver {
     int size_;
-    board board_;
+    std::shared_ptr<board> board_;
     int indexes_[CHESSMAN_TYPES];
     int chessman_count_;
 public:
     using i_solution = solution<int>;
 
-    solver(int size);
+    solver(int size, const std::shared_ptr<board> &board);
 
     ~solver() = default;
 

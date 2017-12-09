@@ -114,10 +114,10 @@ std::string io_interface::chessman_out(chessman f) const {
 }
 
 void io_interface::print_solution(std::ostream &os, const solution<int> &s) const {
-    solution<int>::map_t v = s.get_figures();
+    i_solution::map_t v = s.get_figures();
     const int size = s.get_size();
-    solution<int>::map_t::const_iterator end = v.end();
-    solution<int>::map_t::iterator it;
+    i_solution::map_t::const_iterator end = v.end();
+    i_solution::map_t::iterator it;
 
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
