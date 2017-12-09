@@ -4,7 +4,7 @@ namespace chessy {
 
 template <class C>
 void solution<C>::add_figure(const C &x, const C &y, chessman f) {
-    m[std::make_pair(x, y)] = f;
+    m_[std::make_pair(x, y)] = f;
 }
 
 template <class C>
@@ -20,7 +20,7 @@ bool solution<C>::operator==(const solution &other) const {
     }
     // TODO массив с преобразованными координатами, и итерироваться по нему ???
 
-    for (const auto &p : m) {
+    for (const auto &p : m_) {
         coordinate_t c = p.first;
         // no transformation
         if (variations[0] && !find_chessman(c.first, c.second, p.second, other)) {
@@ -54,6 +54,9 @@ bool solution<C>::operator==(const solution &other) const {
         if (variations[7] && !find_chessman(c.second, c.first, p.second, other)) {
             variations[7] = false;
         }
+    }
+    if (variations[0]) {
+        throw std::logic_error("WTF HOW ARE THEY EQUAL?!??!?!?!");
     }
     for (int i = 0; i < variations_count; ++i) {
         if (variations[i]) {
@@ -91,8 +94,8 @@ std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>>
 
 template <class C>
 bool solution<C>::find_chessman(const C &x, const C &y, chessman f, const solution<C> &other) const {
-    auto it = other.m.find(std::make_pair(x, y));
-    return !((it == other.m.end()) || (it->second != f));
+    auto it = other.m_.find(std::make_pair(x, y));
+    return !((it == other.m_.end()) || (it->second != f));
 }
 
 template <class C>
@@ -109,12 +112,23 @@ solution<C> solution<C>::get_solution(const chessman **field, int size) {
 }
 
 template <class C>
-std::vector<std::pair<typename solution<C>::coordinate_t, chessman>> solution<C>::get_figures() const {
-    std::vector<std::pair<coordinate_t, chessman>> ret(m.size());
-    for (const auto &p : m) {
-        ret.push_back(p);
-    }
-    return ret;
+const typename solution<C>::map_t &solution<C>::get_figures() const {
+//    std::vector<std::pair<coordinate_t, chessman>> ret(m_.size());
+//    auto m_it = m_.begin();
+//    auto v_it = ret.begin();
+//
+//    for (; m_it != m_.end(); ++m_it, ++v_it) {
+//        *v_it = *m_it;
+//    }
+//    for (const auto &p : m) {
+//        ret.push_back(p);
+//    }
+    return m_;
+}
+
+template <class C>
+int solution<C>::get_size() const {
+    return size_;
 }
 
 template class solution<int>;

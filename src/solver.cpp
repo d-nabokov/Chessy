@@ -39,7 +39,7 @@ void solver::reset() {
 
 void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x, int prev_y) {
     ++recursive_count;
-    // TODO сделать условием "f_number == chessman_count() - 1" и не делать одну рекурсию лишнюю
+    // no : TODO сделать условием "f_number == chessman_count() - 1" и не делать одну рекурсию лишнюю
     if (f_number == chessman_count_) {
         solutions->push_back(solver::i_solution::get_solution(board_.get_field(), size_));
         return;

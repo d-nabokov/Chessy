@@ -16,6 +16,10 @@ int main(int argc, char *argv[]) {
 
     std::cout << "SOLUTIONS = " << solutions.size() << "\n";
 
+    for (const auto &s : solutions) {
+        i.print_solution(std::cout, s);
+    }
+
 //    chessy::parse("../src/input");
 //    std::vector<chessy::i_solution> solutions = chessy::solve();
 //    for (const auto &s : solutions) {

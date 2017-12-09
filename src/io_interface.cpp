@@ -109,17 +109,32 @@ std::string io_interface::chessman_out(chessman f) const {
         case chessman::pawn:
             return "P";
         case chessman::empty:
-            return "#";
+            return "-";
     }
 }
 
 void io_interface::print_solution(std::ostream &os, const solution<int> &s) const {
-    auto v = s.get_figures();
+    solution<int>::map_t v = s.get_figures();
+    const int size = s.get_size();
+    solution<int>::map_t::const_iterator end = v.end();
+    solution<int>::map_t::iterator it;
+
     os << "SOLUTION:\n";
-    for (auto &&p : v) {
-        auto coord = p.first;
-        os << coord.first << " " << coord.second << " " << chessman_out(p.second) << "\n";
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if ((it = v.find(std::make_pair(i, j))) != end) {
+                os << chessman_out(it->second);
+            } else {
+                os << '-';
+            }
+        }
+        os << "\n";
     }
+
+//    for (auto &&p : v) {
+//        auto coord = p.first;
+//        os << coord.first << " " << coord.second << " " << chessman_out(p.second) << "\n";
+//    }
 }
 
 }

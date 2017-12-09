@@ -31,7 +31,7 @@ public:
 
     void add_figure(const C &x, const C &y, chessman f);
 
-    std::vector<std::pair<coordinate_t, chessman>> get_figures() const;
+    const map_t &get_figures() const;
 
     // TODO возвращать список координат с фигурой
 //    friend std::ostream &operator<<(std::ostream &os, const solution &s) {
@@ -48,8 +48,10 @@ public:
     static std::vector<solution> remove_duplicates(std::vector<solution> *l);
     static solution get_solution(const chessman **field, int size);
 
+    int get_size() const;
+
 private:
-    map_t m;
+    map_t m_;
     int size_;
 
     bool find_chessman(const C &x, const C &y, chessman f, const solution &other) const;
