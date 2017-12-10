@@ -16,8 +16,11 @@ void independent_board::reset() {
 }
 
 bool independent_board::check_chessman(int x, int y, figure f, int *figures) const {
-    if (field_[x][y] != chessman::empty || f.get_color() == color::white) {
+    if (field_[x][y] != chessman::empty) {
         return false;
+    }
+    if (f.get_color() == color::white) {
+        return true;
     }
 
     if (has_figure(figures, chessman::queen) || has_figure(figures, chessman::rook)) {

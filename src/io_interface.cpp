@@ -8,7 +8,7 @@
 
 namespace chessy {
 
-io_interface::i_shared_ptr io_interface::parse(const std::string &filename) const {
+std::pair<io_interface::i_shared_ptr, modes> io_interface::parse(const std::string &filename) const {
     i_shared_ptr f;
     int * figures;
 
@@ -23,23 +23,20 @@ io_interface::i_shared_ptr io_interface::parse(const std::string &filename) cons
         if (line.size() == 0) {
             continue;
         }
-        std::istringstream ss(line);
-        std::string s;
-        ss >> s;
 
         int count = 1;
-        auto index = s.find('*');
+        auto index = line.find('*');
         if (index != std::string::npos) {
-            count = static_cast<int>(std::stoul(s.substr(0, index)));
-            s = s.substr(index + 1);
+            count = static_cast<int>(std::stoul(line.substr(0, index)));
+            line = line.substr(index + 1);
         }
 
-        auto ssize = s.size();
+        auto l_size = line.size();
 
         if (first_line) {
             first_line = false;
             int size;
-            if (ssize == 3) {
+            if (l_size == 3) {
                 colored = true;
                 size = 2 * CHESSMAN_TYPES;
             } else {
@@ -52,15 +49,15 @@ io_interface::i_shared_ptr io_interface::parse(const std::string &filename) cons
             std::memset(figures, 0, size * sizeof(*figures));
         }
 
-        if (!((colored && ssize == 3) || (!colored && ssize == 1))) {
+        if (!((colored && l_size == 3) || (!colored && l_size == 1))) {
             throw std::invalid_argument("Invalid line");
         }
 
-        chessman c = chessman_from_char(s[0]);
-        figure fig = colored ? figure(c, color_from_char(s[2])) : figure(c);
+        chessman c = chessman_from_char(line[0]);
+        figure fig = colored ? figure(c, color_from_char(line[2])) : figure(c);
         figures[fig.figure_index()] += count;
     }
-    return f;
+    return std::make_pair(f, colored ? modes::independent : modes::independent_colorless);
 }
 
 chessman io_interface::chessman_from_char(char c) const {

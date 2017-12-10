@@ -5,7 +5,7 @@
 
 namespace chessy {
 
-class independent_board : board {
+class independent_board : public board {
 public:
     independent_board(int size);
 

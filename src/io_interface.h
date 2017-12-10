@@ -3,6 +3,7 @@
 
 #include "chessman.h"
 #include "solution.h"
+#include "modes.h"
 #include <memory>
 
 namespace chessy {
@@ -12,7 +13,7 @@ public:
     using i_solution = solution<int>;
     using i_shared_ptr = std::shared_ptr<int>;
 
-    i_shared_ptr parse(const std::string &filename) const;
+    std::pair<i_shared_ptr, modes> parse(const std::string &filename) const;
     void print_solution(std::ostream &os, const i_solution &s, bool colored) const;
 //    void print_debug() const;
 
