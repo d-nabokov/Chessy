@@ -125,20 +125,15 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
     }
 
     if (has_figure(figures, chessman::pawn)) {
-
-        if (f == chessman::pawn && x < size_ - 1) {
-            if (y > 0 && field_[x + 1][y - 1] != chessman::empty) {
-                return false;
-            }
-            if (y + 1 < size_ && field_[x + 1][y + 1] != chessman::empty) {
-                return false;
-            }
-        }
         if (x > 0) {
-            if (y > 0 && field_[x - 1][y - 1] == chessman::pawn) {
+            if (y > 0 && field_[x - 1][y - 1] != chessman::empty
+                && ((f == chessman::pawn && field_[x - 1][y - 1].get_color() == color::white)
+                    || is_white_chessman(field_[x - 1][y - 1], chessman::pawn))) {
                 return false;
             }
-            if (y + 1 < size_ && field_[x - 1][y + 1] == chessman::pawn) {
+            if (y + 1 < size_ && field_[x - 1][y + 1] != chessman::empty
+                && ((f == chessman::pawn && field_[x - 1][y + 1].get_color() == color::white)
+                    || is_white_chessman(field_[x - 1][y + 1], chessman::pawn))) {
                 return false;
             }
         }
@@ -148,15 +143,23 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
 }
 
 void independent_board::set_chessman(int x, int y, figure f) {
-
+    field_[x][y] = f;
 }
 
 void independent_board::unset_chessman(int x, int y, figure f) {
-
+    field_[x][y] = chessman::empty;
 }
 
 board::i_solution independent_board::get_solution() {
-
+    i_solution s(size_);
+    for (int i = 0; i < size_; ++i) {
+        for (int j = 0; j < size_; ++j) {
+            if (field_[i][j] != chessman::empty) {
+                s.add_figure(i, j, field_[i][j]);
+            }
+        }
+    }
+    return s;
 }
 
 bool independent_board::has_figure(int *figures, chessman c) const {
