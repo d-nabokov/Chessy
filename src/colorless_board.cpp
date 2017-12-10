@@ -164,18 +164,18 @@ board::i_solution colorless_board::get_solution() {
 }
 
 bool colorless_board::has_king(int *figures) const {
-//    return figures[chessman_index4242(chessman::king)] > 0;
-    return figures[static_cast<int>(chessman::king) - 1] > 0;
+    return figures[chessman_index(chessman::king)] > 0;
+//    return figures[static_cast<int>(chessman::king) - 1] > 0;
 }
 
 bool colorless_board::has_knight(int *figures) const {
-//    return figures[chessman_index4242(chessman::knight)] > 0;
-    return figures[static_cast<int>(chessman::knight) - 1] > 0;
+    return figures[chessman_index(chessman::knight)] > 0;
+//    return figures[static_cast<int>(chessman::knight) - 1] > 0;
 }
 
 bool colorless_board::has_pawn(int *figures) const {
-//    return figures[chessman_index4242(chessman::pawn)] > 0;
-    return figures[static_cast<int>(chessman::pawn) - 1] > 0;
+    return figures[chessman_index(chessman::pawn)] > 0;
+//    return figures[static_cast<int>(chessman::pawn) - 1] > 0;
 }
 
 }

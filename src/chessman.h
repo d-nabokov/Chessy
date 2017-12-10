@@ -20,9 +20,9 @@ enum class color : unsigned char {
 
 static const int CHESSMAN_TYPES = 6;
 
-//int chessman_index4242(chessman f) {
-//    return static_cast<int>(f) - 1;
-//}
+constexpr int chessman_index(chessman f) {
+    return static_cast<int>(f) - 1;
+}
 
 class figure {
     unsigned char f_;
