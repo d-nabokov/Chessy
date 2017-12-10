@@ -74,10 +74,6 @@ public:
     }
 
 protected:
-    virtual bool has_king(int *figures) const = 0;
-    virtual bool has_knight(int *figures) const = 0;
-    virtual bool has_pawn(int *figures) const = 0;
-
     int asc_index(int x, int y) const {
         return x + y;
     }

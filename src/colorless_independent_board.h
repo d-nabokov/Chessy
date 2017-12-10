@@ -5,14 +5,14 @@
 
 namespace chessy {
 
-class colorless_board : public board {
+class colorless_independent_board : public board {
     bool *horizontal;
     bool *vertical;
     bool *asc_diagonal;
     bool *desc_diagonal;
 public:
-    colorless_board(int size);
-    ~colorless_board() override;
+    colorless_independent_board(int size);
+    ~colorless_independent_board() override;
 
     void reset() override;
 
@@ -23,14 +23,6 @@ public:
     void unset_chessman(int x, int y, figure f) override;
 
     i_solution get_solution() override;
-
-protected:
-    bool has_king(int *figures) const override;
-
-    bool has_knight(int *figures) const override;
-
-    bool has_pawn(int *figures) const override;
-
 };
 
 

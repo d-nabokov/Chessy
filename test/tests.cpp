@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "../src/io_interface.h"
 #include "../src/solver.h"
-#include "../src/colorless_board.h"
+#include "../src/colorless_independent_board.h"
 #include <memory>
 #include <string>
 
@@ -29,7 +29,7 @@ using chessy::solver;
 chessy::io_interface i;
 
 std::vector<solver::i_solution> get_solutions(int size, const std::string &filename, bool fundamental) {
-    chessy::solver s(std::shared_ptr<chessy::board>(new chessy::colorless_board(size)));
+    chessy::solver s(std::shared_ptr<chessy::board>(new chessy::colorless_independent_board(size)));
     if (fundamental) {
         return s.solve(i.parse("../test/data/" + filename));
     } else {

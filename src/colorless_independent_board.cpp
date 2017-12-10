@@ -1,9 +1,9 @@
 #include <cstring>
-#include "colorless_board.h"
+#include "colorless_independent_board.h"
 
 namespace chessy {
 
-colorless_board::colorless_board(int size)
+colorless_independent_board::colorless_independent_board(int size)
         : board(size, CHESSMAN_TYPES)
 {
     horizontal = new bool[6 * size - 2];
@@ -12,16 +12,16 @@ colorless_board::colorless_board(int size)
     desc_diagonal = asc_diagonal + (2 * size - 1);
 }
 
-colorless_board::~colorless_board() {
+colorless_independent_board::~colorless_independent_board() {
     delete[] horizontal;
 }
 
-void colorless_board::reset() {
+void colorless_independent_board::reset() {
     board::reset();
     std::memset(horizontal, 0, (6 * size_ - 2) * sizeof(*horizontal));
 }
 
-bool colorless_board::check_chessman(int x, int y, figure f, int *figures) const {
+bool colorless_independent_board::check_chessman(int x, int y, figure f, int *figures) const {
     if (field_[x][y] != chessman::empty
         || horizontal[x]
         || vertical[y]
@@ -73,7 +73,7 @@ bool colorless_board::check_chessman(int x, int y, figure f, int *figures) const
         }
     }
 
-    if (has_king(figures)) {
+    if (figures[chessman_index(chessman::king)] > 0) {
         for (int i = std::max(x - 1, 0); i <= std::min(x + 1, size_ - 1); ++i) {
             for (int j = std::max(y - 1, 0); j <= std::min(y + 1, size_ - 1); ++j) {
                 if (field_[i][j] != chessman::empty && (field_[i][j] == chessman::king || f == chessman::king)) {
@@ -83,7 +83,7 @@ bool colorless_board::check_chessman(int x, int y, figure f, int *figures) const
         }
     }
 
-    if (has_knight(figures)) {
+    if (figures[chessman_index(chessman::knight)] > 0) {
         for (int i = -2; i <= 2; ++i) {
             if (i == 0 || x + i < 0) {
                 continue;
@@ -103,7 +103,7 @@ bool colorless_board::check_chessman(int x, int y, figure f, int *figures) const
         }
     }
 
-    if (has_pawn(figures)) {
+    if (figures[chessman_index(chessman::pawn)] > 0) {
         if (f == chessman::pawn && x < size_ - 1) {
             if (y > 0 && field_[x + 1][y - 1] != chessman::empty) {
                 return false;
@@ -125,7 +125,7 @@ bool colorless_board::check_chessman(int x, int y, figure f, int *figures) const
     return true;
 }
 
-void colorless_board::set_chessman(int x, int y, figure f) {
+void colorless_independent_board::set_chessman(int x, int y, figure f) {
     field_[x][y] = f;
     if (f == chessman::queen || f == chessman::rook) {
         horizontal[x] = true;
@@ -138,7 +138,7 @@ void colorless_board::set_chessman(int x, int y, figure f) {
     }
 }
 
-void colorless_board::unset_chessman(int x, int y, figure f) {
+void colorless_independent_board::unset_chessman(int x, int y, figure f) {
     field_[x][y] = chessman::empty;
     if (f == chessman::queen || f == chessman::rook) {
         horizontal[x] = false;
@@ -151,7 +151,7 @@ void colorless_board::unset_chessman(int x, int y, figure f) {
     }
 }
 
-board::i_solution colorless_board::get_solution() {
+board::i_solution colorless_independent_board::get_solution() {
     i_solution s(size_);
     for (int i = 0; i < size_; ++i) {
         for (int j = 0; j < size_; ++j) {
@@ -161,21 +161,6 @@ board::i_solution colorless_board::get_solution() {
         }
     }
     return s;
-}
-
-bool colorless_board::has_king(int *figures) const {
-    return figures[chessman_index(chessman::king)] > 0;
-//    return figures[static_cast<int>(chessman::king) - 1] > 0;
-}
-
-bool colorless_board::has_knight(int *figures) const {
-    return figures[chessman_index(chessman::knight)] > 0;
-//    return figures[static_cast<int>(chessman::knight) - 1] > 0;
-}
-
-bool colorless_board::has_pawn(int *figures) const {
-    return figures[chessman_index(chessman::pawn)] > 0;
-//    return figures[static_cast<int>(chessman::pawn) - 1] > 0;
 }
 
 }

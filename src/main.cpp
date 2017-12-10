@@ -2,7 +2,7 @@
 #include <memory>
 #include "io_interface.h"
 #include "solver.h"
-#include "colorless_board.h"
+#include "colorless_independent_board.h"
 
 
 int main(int argc, char *argv[]) {
@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     int size = 8;
     chessy::io_interface i;
     auto figures = i.parse("../src/input");
-    std::shared_ptr<chessy::board> b(new chessy::colorless_board(size));
+    std::shared_ptr<chessy::board> b(new chessy::colorless_independent_board(size));
     chessy::solver solver(b);
     auto solutions = solver.solve_not_fundamental(figures);
 
