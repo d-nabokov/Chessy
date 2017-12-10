@@ -13,50 +13,38 @@ bool solution<C>::operator==(const solution &other) const {
         return false;
     }
 
-    static const int variations_count = 8;
+    static const int variations_count = 7;
     bool variations[variations_count];
     for (int i = 0; i < variations_count; ++i) {
         variations[i] = true;
     }
-    // TODO массив с преобразованными координатами, и итерироваться по нему ???
 
     for (const auto &p : m_) {
         coordinate_t c = p.first;
-        // no transformation
-        if (variations[0] && !find_chessman(c.first, c.second, p.second, other)) {
-            variations[0] = false;
+        int tr_coords[2 * variations_count] = {
+//                // no transformation
+//                c.first, c.second,
+                // 90 rotation
+                size_ - 1 - c.second, c.first,
+                // 180 rotation
+                size_ - 1 - c.first, size_ - 1 - c.second,
+                // 270 rotation
+                c.second, size_ - 1 - c.first,
+                // horizontal reflection
+                size_ - 1 - c.first, c.second,
+                // vertical reflection
+                c.first, size_ - 1 - c.second,
+                // asc diagonal reflection
+                size_ - 1 - c.second, size_ - 1 - c.first,
+                // desc diagonal reflection
+                c.second, c.first
+        };
+
+        for (int i = 0; i < variations_count; ++i) {
+            if (variations[i] && !find_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
+                variations[i] = false;
+            }
         }
-        // 90 rotation
-        if (variations[1] && !find_chessman(size_ - 1 - c.second, c.first, p.second, other)) {
-            variations[1] = false;
-        }
-        // 180 rotation
-        if (variations[2] && !find_chessman(size_ - 1 - c.first, size_ - 1 - c.second, p.second, other)) {
-            variations[2] = false;
-        }
-        // 270 rotation
-        if (variations[3] && !find_chessman(c.second, size_ - 1 - c.first, p.second, other)) {
-            variations[3] = false;
-        }
-        // horizontal reflection
-        if (variations[4] && !find_chessman(size_ - 1 - c.first, c.second, p.second, other)) {
-            variations[4] = false;
-        }
-        // vertical reflection
-        if (variations[5] && !find_chessman(c.first, size_ - 1 - c.second, p.second, other)) {
-            variations[5] = false;
-        }
-        // asc diagonal reflection
-        if (variations[6] && !find_chessman(size_ - 1 - c.second, size_ - 1 - c.first, p.second, other)) {
-            variations[6] = false;
-        }
-        // desc diagonal reflection
-        if (variations[7] && !find_chessman(c.second, c.first, p.second, other)) {
-            variations[7] = false;
-        }
-    }
-    if (variations[0]) {
-        throw std::logic_error("WTF HOW ARE THEY EQUAL?!");
     }
     for (int i = 0; i < variations_count; ++i) {
         if (variations[i]) {
@@ -93,7 +81,7 @@ std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>>
 }
 
 template <class C>
-bool solution<C>::find_chessman(const C &x, const C &y, figure f, const solution<C> &other) const {
+bool solution<C>::find_figure(const C &x, const C &y, figure f, const solution<C> &other) const {
     auto it = other.m_.find(std::make_pair(x, y));
     return !((it == other.m_.end()) || (it->second != f));
 }

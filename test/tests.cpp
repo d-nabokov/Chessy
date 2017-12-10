@@ -31,9 +31,9 @@ chessy::io_interface i;
 std::vector<solver::i_solution> get_solutions(int size, const std::string &filename, bool fundamental) {
     chessy::solver s(std::shared_ptr<chessy::board>(new chessy::colorless_independent_board(size)));
     if (fundamental) {
-        return s.solve(i.parse("../test/data/" + filename));
+        return s.solve(i.parse("../test/data/" + filename).first);
     } else {
-        return s.solve_not_fundamental(i.parse("../test/data/" + filename));
+        return s.solve_not_fundamental(i.parse("../test/data/" + filename).first);
     }
 }
 

@@ -53,7 +53,7 @@ private:
     map_t m_;
     int size_;
 
-    bool find_chessman(const C &x, const C &y, figure f, const solution &other) const;
+    bool find_figure(const C &x, const C &y, figure f, const solution &other) const;
 };
 
 }
