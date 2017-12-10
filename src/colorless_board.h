@@ -16,13 +16,20 @@ public:
 
     void reset() override;
 
-    bool check_chessman(int x, int y, chessman f, int *figures) const override;
+    bool check_chessman(int x, int y, figure f, int *figures) const override;
 
-    void set_chessman(int x, int y, chessman f) override;
+    void set_chessman(int x, int y, figure f) override;
 
-    void unset_chessman(int x, int y, chessman f) override;
+    void unset_chessman(int x, int y, figure f) override;
 
     i_solution get_solution() override;
+
+protected:
+    bool has_king(int *figures) const override;
+
+    bool has_knight(int *figures) const override;
+
+    bool has_pawn(int *figures) const override;
 
 };
 

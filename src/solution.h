@@ -20,7 +20,7 @@ public:
 
     struct pair_hash;
     using coordinate_t = std::pair<C, C>;
-    using map_t = std::unordered_map<coordinate_t, chessman, pair_hash>;
+    using map_t = std::unordered_map<coordinate_t, figure, pair_hash>;
 
     struct pair_hash {
         size_t operator()(const coordinate_t &p) const {
@@ -29,7 +29,7 @@ public:
         }
     };
 
-    void add_figure(const C &x, const C &y, chessman f);
+    void add_figure(const C &x, const C &y, figure f);
 
     const map_t &get_figures() const;
 
@@ -53,7 +53,7 @@ private:
     map_t m_;
     int size_;
 
-    bool find_chessman(const C &x, const C &y, chessman f, const solution &other) const;
+    bool find_chessman(const C &x, const C &y, figure f, const solution &other) const;
 };
 
 }

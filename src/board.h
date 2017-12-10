@@ -9,38 +9,63 @@ namespace chessy {
 
 class board {
 protected:
-    chessman **field;
+    figure **field_;
     const int size_;
+    int *indexes_;
+    int indexes_size_;
 public:
     using i_solution = solution<int>;
 
-    board(int size)
-        : size_(size)
+    board(int size, int indexes_size)
+        : size_(size), indexes_size_(indexes_size)
     {
-        field = new chessman*[size];
+        field_ = new figure*[size];
         for (int i = 0; i < size; ++i) {
-            field[i] = new chessman[size];
+            field_[i] = new figure[size];
         }
+        indexes_ = new int[indexes_size];
         board::reset();
     }
 
     virtual ~board() {
         for (int i = 0; i < size_; ++i) {
-            delete[] field[i];
+            delete[] field_[i];
         }
-        delete[] field;
+        delete[] field_;
+        delete[] indexes_;
+    }
+
+    int figure_count() const {
+        return indexes_[indexes_size_ - 1];
+    }
+
+    void init_indexes(int *figures_count) {
+        std::memset(indexes_, 0, indexes_size_ * sizeof(*indexes_));
+        int sum = 0;
+        for (int i = 0; i < indexes_size_; ++i) {
+            sum += figures_count[i];
+            indexes_[i] = sum;
+        }
+    }
+
+    int get_next_index(int prev_index, int f_number) const {
+        int index = prev_index;
+        while (indexes_[index] <= f_number) {
+            ++index;
+        }
+        return index;
     }
 
     virtual void reset() {
         for (int i = 0; i < size_; ++i) {
-            std::memset(field[i], static_cast<int>(chessman::empty), size_ * sizeof(**field));
+            std::memset(field_[i], 0, size_ * sizeof(**field_));
         }
     }
 
-    virtual bool check_chessman(int x, int y, chessman f, int *figures) const = 0;
+    virtual bool check_chessman(int x, int y, figure f, int *figures) const = 0;
 
-    virtual void set_chessman(int x, int y, chessman f) = 0;
-    virtual void unset_chessman(int x, int y, chessman f) = 0;
+    virtual void set_chessman(int x, int y, figure f) = 0;
+    virtual void unset_chessman(int x, int y, figure f) = 0;
 
     virtual i_solution get_solution() = 0;
 
@@ -49,6 +74,10 @@ public:
     }
 
 protected:
+    virtual bool has_king(int *figures) const = 0;
+    virtual bool has_knight(int *figures) const = 0;
+    virtual bool has_pawn(int *figures) const = 0;
+
     int asc_index(int x, int y) const {
         return x + y;
     }

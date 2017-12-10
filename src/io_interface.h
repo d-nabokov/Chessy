@@ -13,12 +13,13 @@ public:
     using i_shared_ptr = std::shared_ptr<int>;
 
     i_shared_ptr parse(const std::string &filename) const;
-    void print_solution(std::ostream &os, const i_solution &s) const;
+    void print_solution(std::ostream &os, const i_solution &s, bool colored) const;
 //    void print_debug() const;
 
 private:
     chessman chessman_from_char(char c) const;
-    std::string chessman_out(chessman f) const;
+    color color_from_char(char c) const;
+    std::string figure_out(figure f, bool colored) const;
 };
 
 }

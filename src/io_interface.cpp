@@ -9,14 +9,16 @@
 namespace chessy {
 
 io_interface::i_shared_ptr io_interface::parse(const std::string &filename) const {
-    i_shared_ptr f(new int[CHESSMAN_TYPES], std::default_delete<int[]>());
-    int * figures = f.get();
-    std::memset(figures, 0, CHESSMAN_TYPES * sizeof(*figures));
+    i_shared_ptr f;
+    int * figures;
 
     std::ifstream in(filename);
     if (!in) {
         throw std::invalid_argument("File does not exist");
     }
+
+    bool first_line = true;
+    bool colored;
     for (std::string line; std::getline(in, line);) {
         if (line.size() == 0) {
             continue;
@@ -31,43 +33,35 @@ io_interface::i_shared_ptr io_interface::parse(const std::string &filename) cons
             count = static_cast<int>(std::stoul(s.substr(0, index)));
             s = s.substr(index + 1);
         }
-        if (s.size() != 1) {
-            throw std::invalid_argument("Invalid figure");
+
+        auto ssize = s.size();
+
+        if (first_line) {
+            first_line = false;
+            int size;
+            if (ssize == 3) {
+                colored = true;
+                size = 2 * CHESSMAN_TYPES;
+            } else {
+                colored = false;
+                size = CHESSMAN_TYPES;
+            }
+
+            f = i_shared_ptr(new int[size], std::default_delete<int[]>());
+            figures = f.get();
+            std::memset(figures, 0, size * sizeof(*figures));
         }
 
-        chessman figure = chessman_from_char(s[0]);
-        figures[chessman_index(figure)] += count;
+        if (!((colored && ssize == 3) || (!colored && ssize == 1))) {
+            throw std::invalid_argument("Invalid line");
+        }
+
+        chessman c = chessman_from_char(s[0]);
+        figure fig = colored ? figure(c, color_from_char(s[2])) : figure(c);
+        figures[fig.figure_index()] += count;
     }
     return f;
 }
-
-//void io_interface::print_debug(const chessman **field, int size) const {
-//    std::cout << "*****START*****\n";
-//    for (int i = 0; i < size; ++i) {
-//        for (int j = 0; j < size; ++j) {
-//            std::cout << chessman_out(field[i][j]) << " ";
-//        }
-//        std::cout << "\n";
-//    }
-//    std::cout << "**\n";
-//    for (int i = 0; i < size; ++i) {
-//        std::cout << horizontal[i] << " ";
-//    }
-//    std::cout << "\n";
-//    for (int i = 0; i < size; ++i) {
-//        std::cout << vertical[i] << " ";
-//    }
-//    std::cout << "\n";
-//    for (int i = 0; i < 2 * size - 1; ++i) {
-//        std::cout << asc_diagonal[i] << " ";
-//    }
-//    std::cout << "\n";
-//    for (int i = 0; i < 2 * size - 1; ++i) {
-//        std::cout << desc_diagonal[i] << " ";
-//    }
-//    std::cout << "\n";
-//    std::cout << "*****END*****" << std::endl;
-//}
 
 chessman io_interface::chessman_from_char(char c) const {
     switch (c) {
@@ -94,26 +88,58 @@ chessman io_interface::chessman_from_char(char c) const {
     }
 }
 
-std::string io_interface::chessman_out(chessman f) const {
-    switch (f) {
-        case chessman::queen:
-            return "Q";
-        case chessman::rook:
-            return "R";
-        case chessman::bishop:
-            return "B";
-        case chessman::knight:
-            return "N";
-        case chessman::king:
-            return "K";
-        case chessman::pawn:
-            return "P";
-        case chessman::empty:
-            return "-";
+color io_interface::color_from_char(char c) const {
+    switch (c) {
+        case 'W':
+        case 'w':
+            return color::white;
+        case 'B':
+        case 'b':
+            return color::black;
+        default:
+            throw std::logic_error("No such color");
     }
 }
 
-void io_interface::print_solution(std::ostream &os, const solution<int> &s) const {
+std::string io_interface::figure_out(figure f, bool colored) const {
+    std::string s;
+    switch (f.get_chessman()) {
+        case chessman::queen:
+            s += 'Q';
+            break;
+        case chessman::rook:
+            s += 'R';
+            break;
+        case chessman::bishop:
+            s += 'B';
+            break;
+        case chessman::knight:
+            s += 'N';
+            break;
+        case chessman::king:
+            s += 'K';
+            break;
+        case chessman::pawn:
+            s += 'P';
+            break;
+        case chessman::empty:
+            s += '_';
+    }
+
+    if (colored) {
+        switch (f.get_color()) {
+            case color::white:
+                s += 'w';
+                break;
+            case color::black:
+                s += 'b';
+                break;
+        }
+    }
+    return s;
+}
+
+void io_interface::print_solution(std::ostream &os, const solution<int> &s, bool colored) const {
     i_solution::map_t v = s.get_figures();
     const int size = s.get_size();
     i_solution::map_t::const_iterator end = v.end();
@@ -122,14 +148,17 @@ void io_interface::print_solution(std::ostream &os, const solution<int> &s) cons
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             if ((it = v.find(std::make_pair(i, j))) != end) {
-                os << chessman_out(it->second);
+                os << figure_out(it->second, colored);
             } else {
                 os << '-';
+                if (colored) {
+                    os << ' ';
+                }
             }
         }
-        os << "\n";
+        os << '\n';
     }
-    os << "\n";
+    os << '\n';
 }
 
 }

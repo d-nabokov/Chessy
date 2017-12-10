@@ -3,7 +3,7 @@
 namespace chessy {
 
 template <class C>
-void solution<C>::add_figure(const C &x, const C &y, chessman f) {
+void solution<C>::add_figure(const C &x, const C &y, figure f) {
     m_[std::make_pair(x, y)] = f;
 }
 
@@ -93,7 +93,7 @@ std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>>
 }
 
 template <class C>
-bool solution<C>::find_chessman(const C &x, const C &y, chessman f, const solution<C> &other) const {
+bool solution<C>::find_chessman(const C &x, const C &y, figure f, const solution<C> &other) const {
     auto it = other.m_.find(std::make_pair(x, y));
     return !((it == other.m_.end()) || (it->second != f));
 }

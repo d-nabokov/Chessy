@@ -21,43 +21,33 @@ std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
 std::vector<solver::i_solution> solver::solve_not_fundamental(const i_shared_ptr &f) {
     reset();
 
-    int *figures = f.get();
-    int sum = 0;
-    for (int i = 0; i < CHESSMAN_TYPES; ++i) {
-        sum += figures[i];
-        indexes_[i] = sum;
-    }
-
-    chessman_count_ = chessman_count();
+    int *figures_count = f.get();
+    board_->init_indexes(figures_count);
 
     std::vector<solver::i_solution> solutions;
-    if (sum != 0) {
-        recursive_solve(&solutions, 0, figures, 0, 0, -1);
-    }
+    recursive_solve(&solutions, 0, figures_count, 0, 0, -1);
     std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
     std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
     return solutions;
 }
 
 void solver::reset() {
-    std::memset(indexes_, 0, CHESSMAN_TYPES * sizeof(*indexes_));
     board_->reset();
 }
 
-void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures, int prev_index, int prev_x, int prev_y) {
+void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures_count, int prev_index, int prev_x, int prev_y) {
     ++recursive_count;
-    if (f_number == chessman_count_) {
+    if (f_number == board_->figure_count()) {
         solutions->push_back(board_->get_solution());
         return;
     }
 
 //    print_debug();
 
-    int chessman_index = prev_index;
-    while (indexes_[chessman_index] <= f_number) {
-        ++chessman_index;
-    }
-    chessman f = chessman_from_index(chessman_index);
+
+    int chessman_index = board_->get_next_index(prev_index, f_number);
+
+    figure f = figure::figure_from_index(chessman_index);
     bool first_iteration = true;
     int j, i = (prev_index == chessman_index) ? prev_x : 0;
     for (; i < size_; ++i) {
@@ -68,17 +58,13 @@ void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_n
             j = 0;
         }
         for (; j < size_; ++j) {
-            if (board_->check_chessman(i, j, f, figures)) {
+            if (board_->check_chessman(i, j, f, figures_count)) {
                 board_->set_chessman(i, j, f);
-                recursive_solve(solutions, f_number + 1, figures, chessman_index, i, j);
+                recursive_solve(solutions, f_number + 1, figures_count, chessman_index, i, j);
                 board_->unset_chessman(i, j, f);
             }
         }
     }
-}
-
-int solver::chessman_count() {
-    return indexes_[CHESSMAN_TYPES - 1];
 }
 
 }
