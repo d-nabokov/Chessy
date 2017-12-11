@@ -62,7 +62,7 @@ public:
         }
     }
 
-    virtual bool check_chessman(int x, int y, figure f, int *figures) const = 0;
+    virtual bool check_chessman(int x, int y, figure f, int *figures_count) const = 0;
 
     virtual void set_chessman(int x, int y, figure f) = 0;
     virtual void unset_chessman(int x, int y, figure f) = 0;

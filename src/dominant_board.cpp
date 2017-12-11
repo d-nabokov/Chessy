@@ -24,7 +24,7 @@ void dominant_board::reset() {
     uncovered_ = size_ * size_;
 }
 
-bool dominant_board::check_chessman(int x, int y, figure f, int *figures) const {
+bool dominant_board::check_chessman(int x, int y, figure f, int *figures_count) const {
     return (field_[x][y] == chessman::empty) && (potential_ >= uncovered_);
 }
 

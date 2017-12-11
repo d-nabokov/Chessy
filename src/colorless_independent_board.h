@@ -16,15 +16,17 @@ public:
 
     void reset() override;
 
-    bool check_chessman(int x, int y, figure f, int *figures) const override;
+    bool check_chessman(int x, int y, figure f, int *figures_count) const override;
 
     void set_chessman(int x, int y, figure f) override;
 
     void unset_chessman(int x, int y, figure f) override;
 
     bool solution_params(int *figures_count) const override;
-};
 
+private:
+    bool has_figure(int *figures_count, chessman c) const;
+};
 
 }
 

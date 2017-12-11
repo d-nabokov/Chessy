@@ -15,7 +15,7 @@ void independent_board::reset() {
     board::reset();
 }
 
-bool independent_board::check_chessman(int x, int y, figure f, int *figures) const {
+bool independent_board::check_chessman(int x, int y, figure f, int *figures_count) const {
     if (field_[x][y] != chessman::empty) {
         return false;
     }
@@ -23,7 +23,7 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
         return true;
     }
 
-    if (has_figure(figures, chessman::queen) || has_figure(figures, chessman::rook)) {
+    if (has_figure(figures_count, chessman::queen) || has_figure(figures_count, chessman::rook)) {
         bool is_qr = f == chessman::queen || f == chessman::rook;
         for (int i = x + 1; i < size_; ++i) {
             if (field_[i][y] != chessman::empty) {
@@ -59,7 +59,7 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
         }
     }
 
-    if (has_figure(figures, chessman::queen) || has_figure(figures, chessman::bishop)) {
+    if (has_figure(figures_count, chessman::queen) || has_figure(figures_count, chessman::bishop)) {
         bool is_qb = f == chessman::queen || f == chessman::bishop;
         for (int i = 1; x + i < size_ && y + i < size_; ++i) {
             if (field_[x + i][y + i] != chessman::empty) {
@@ -95,7 +95,7 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
         }
     }
 
-    if (has_figure(figures, chessman::king)) {
+    if (has_figure(figures_count, chessman::king)) {
         bool is_k = f == chessman::king;
         for (int i = std::max(x - 1, 0); i <= std::min(x + 1, size_ - 1); ++i) {
             for (int j = std::max(y - 1, 0); j <= std::min(y + 1, size_ - 1); ++j) {
@@ -106,7 +106,7 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
         }
     }
 
-    if (has_figure(figures, chessman::knight)) {
+    if (has_figure(figures_count, chessman::knight)) {
         bool is_n = f == chessman::knight;
         for (int i = -2; i <= 2; ++i) {
             if (i == 0 || x + i < 0) {
@@ -127,7 +127,7 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures) con
         }
     }
 
-    if (has_figure(figures, chessman::pawn)) {
+    if (has_figure(figures_count, chessman::pawn)) {
         if (x > 0) {
             if (y > 0 && field_[x - 1][y - 1] != chessman::empty
                 && ((f == chessman::pawn && field_[x - 1][y - 1].get_color() == color::white)
@@ -153,9 +153,9 @@ void independent_board::unset_chessman(int x, int y, figure f) {
     field_[x][y] = chessman::empty;
 }
 
-bool independent_board::has_figure(int *figures, chessman c) const {
+bool independent_board::has_figure(int *figures_count, chessman c) const {
     int index = chessman_index(c);
-    return figures[index] > 0 || figures[index + CHESSMAN_TYPES] > 0;
+    return figures_count[index] > 0 || figures_count[index + CHESSMAN_TYPES] > 0;
 }
 
 bool independent_board::is_white_chessman(figure f, chessman c) const {
