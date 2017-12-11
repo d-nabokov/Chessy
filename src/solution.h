@@ -43,9 +43,9 @@ public:
 //        return os;
 //    }
 
-    bool operator==(const solution &other) const;
+    bool equal(const solution &other, bool colored) const;
 
-    static std::vector<solution> remove_duplicates(std::vector<solution> *l);
+    static std::vector<solution> remove_duplicates(std::vector<solution> *l, bool colored);
 
     int get_size() const;
 
@@ -54,6 +54,7 @@ private:
     int size_;
 
     bool find_figure(const C &x, const C &y, figure f, const solution &other) const;
+    bool find_opposite_figure(const C &x, const C &y, figure f, const solution &other) const;
 };
 
 }

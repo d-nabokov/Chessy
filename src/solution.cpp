@@ -1,4 +1,6 @@
+#include <iostream>
 #include "solution.h"
+#include "io_interface.h"
 
 namespace chessy {
 
@@ -8,20 +10,21 @@ void solution<C>::add_figure(const C &x, const C &y, figure f) {
 }
 
 template <class C>
-bool solution<C>::operator==(const solution &other) const {
+bool solution<C>::equal(const solution &other, bool colored) const {
     if (size_ != other.size_) {
         return false;
     }
 
-    static const int variations_count = 7;
-    bool variations[variations_count];
-    for (int i = 0; i < variations_count; ++i) {
-        variations[i] = true;
+    static const int tr_count = 7;
+    static bool transformations[2 * tr_count + 1];
+    int size = colored ? 2 * tr_count + 1 : tr_count;
+    for (int i = 0; i < size; ++i) {
+        transformations[i] = true;
     }
 
     for (const auto &p : m_) {
         coordinate_t c = p.first;
-        int tr_coords[2 * variations_count] = {
+        int tr_coords[2 * tr_count] = {
 //                // no transformation
 //                c.first, c.second,
                 // 90 rotation
@@ -40,30 +43,48 @@ bool solution<C>::operator==(const solution &other) const {
                 c.second, c.first
         };
 
-        for (int i = 0; i < variations_count; ++i) {
-            if (variations[i] && !find_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
-                variations[i] = false;
+        for (int i = 0; i < tr_count; ++i) {
+            if (transformations[i] && !find_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
+                transformations[i] = false;
+            }
+            if (colored && transformations[i + tr_count] && !find_opposite_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
+                transformations[i + tr_count] = false;
             }
         }
+        if (colored && transformations[size - 1] && !find_opposite_figure(c.first, c.second, p.second, other)) {
+            transformations[size - 1] = false;
+        }
     }
-    for (int i = 0; i < variations_count; ++i) {
-        if (variations[i]) {
+    for (int i = 0; i < size; ++i) {
+        if (transformations[i]) {
             return true;
         }
     }
+
     return false;
 }
 
 template <class C>
-std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>> *l) {
+std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>> *l, bool colored) {
     std::vector<bool> dupl(l->size(), false);
+
+//    static int count = 0;
 
     for (int i = 0; i + 1 < l->size(); ++i) {
         if (dupl[i]) {
             continue;
         }
         for (int j = i + 1; j < l->size(); ++j) {
-            if ((*l)[i] == (*l)[j]) {
+//            ++count;
+//            io_interface inter;
+//            std::cout << "SOLUTION 1\n";
+//            inter.print_solution(std::cout, (*l)[i], true);
+//            std::cout << "SOLUTION 2\n";
+//            inter.print_solution(std::cout, (*l)[j], true);
+//            auto b = (*l)[i].equal((*l)[j], colored);
+//            std::cout << "RESULT = " << b << "\n";
+//            std::cout << "COUNT = " << count << "\n";
+            if ((*l)[i].equal((*l)[j], colored)) {
                 dupl[j] = true;
             }
         }
@@ -83,7 +104,13 @@ std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>>
 template <class C>
 bool solution<C>::find_figure(const C &x, const C &y, figure f, const solution<C> &other) const {
     auto it = other.m_.find(std::make_pair(x, y));
-    return !((it == other.m_.end()) || (it->second != f));
+    return (it != other.m_.end()) && (it->second == f);
+}
+
+template <class C>
+bool solution<C>::find_opposite_figure(const C &x, const C &y, figure f, const solution<C> &other) const {
+    auto it = other.m_.find(std::make_pair(x, y));
+    return (it != other.m_.end()) && (it->second.opposite_colors(f));
 }
 
 

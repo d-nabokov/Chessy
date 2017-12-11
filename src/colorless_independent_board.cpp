@@ -163,4 +163,8 @@ board::i_solution colorless_independent_board::get_solution() {
     return s;
 }
 
+bool colorless_independent_board::solution_params() {
+    return false;
+}
+
 }
