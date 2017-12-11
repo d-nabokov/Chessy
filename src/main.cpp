@@ -19,11 +19,10 @@ int main(int argc, char *argv[]) {
             b = new chessy::colorless_independent_board(size);
             break;
         case modes::independent:
-            std::cout << "COLORFUL!!\n";
             b = new chessy::independent_board(size);
             break;
-        case modes::dependent:
-            b = new chessy::dependent_board(size);
+        case modes::dominant:
+            b = new chessy::dominant_board(size);
             break;
     }
     std::shared_ptr<chessy::board> shr(b);

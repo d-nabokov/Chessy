@@ -4,7 +4,7 @@
 enum class modes {
     independent_colorless,
     independent,
-    dependent,
+    dominant,
 };
 
 #endif //CHESSY_MODES_H

@@ -2,8 +2,8 @@
 
 namespace chessy {
 
-dominant_board::dominant_board(int size) 
-        : board(size, CHESSMAN_TYPES) 
+dominant_board::dominant_board(int size)
+        : board(size, CHESSMAN_TYPES)
 {
 }
 
@@ -29,10 +29,6 @@ void dominant_board::unset_chessman(int x, int y, figure f) {
 
 bool dominant_board::solution_params(int *figures_count) {
     return false;
-}
-
-board::i_solution dominant_board::get_solution() {
-    return nullptr;
 }
 
 }

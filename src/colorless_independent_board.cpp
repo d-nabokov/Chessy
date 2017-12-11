@@ -151,18 +151,6 @@ void colorless_independent_board::unset_chessman(int x, int y, figure f) {
     }
 }
 
-board::i_solution colorless_independent_board::get_solution() {
-    i_solution s(size_);
-    for (int i = 0; i < size_; ++i) {
-        for (int j = 0; j < size_; ++j) {
-            if (field_[i][j] != chessman::empty) {
-                s.add_figure(i, j, field_[i][j]);
-            }
-        }
-    }
-    return s;
-}
-
 bool colorless_independent_board::solution_params(int *figures_count) {
     return false;
 }

@@ -69,7 +69,17 @@ public:
 
     virtual bool solution_params(int *figures_count) = 0;
 
-    virtual i_solution get_solution() = 0;
+    virtual i_solution get_solution() {
+        i_solution s(size_);
+        for (int i = 0; i < size_; ++i) {
+            for (int j = 0; j < size_; ++j) {
+                if (field_[i][j] != chessman::empty) {
+                    s.add_figure(i, j, field_[i][j]);
+                }
+            }
+        }
+        return s;
+    }
 
     int get_size() const {
         return size_;

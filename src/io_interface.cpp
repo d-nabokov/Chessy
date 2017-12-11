@@ -25,7 +25,7 @@ std::pair<io_interface::i_shared_ptr, modes> io_interface::parse(const std::stri
         }
 
         if (first_line && line[0] == 'd') {
-            m = modes::dependent;
+            m = modes::dominant;
             continue;
         }
 

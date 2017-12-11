@@ -21,8 +21,6 @@ public:
 
     bool solution_params(int *figures_count) override;
 
-    i_solution get_solution() override;
-
 private:
     bool has_figure(int *figures, chessman c) const;
     bool is_white_chessman(figure f, chessman c) const;
