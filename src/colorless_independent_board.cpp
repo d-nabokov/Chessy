@@ -163,7 +163,7 @@ board::i_solution colorless_independent_board::get_solution() {
     return s;
 }
 
-bool colorless_independent_board::solution_params() {
+bool colorless_independent_board::solution_params(int *figures_count) {
     return false;
 }
 

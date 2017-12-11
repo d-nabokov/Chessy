@@ -185,7 +185,12 @@ bool independent_board::is_attack_each_other(bool is_desired, figure f, chessman
            || is_white_chessman(f, c);
 }
 
-bool independent_board::solution_params() {
+bool independent_board::solution_params(int *figures_count) {
+    for (int i = 0; i < CHESSMAN_TYPES; ++i) {
+        if (figures_count[i] != figures_count[i + CHESSMAN_TYPES]) {
+            return false;
+        }
+    }
     return true;
 }
 

@@ -67,7 +67,7 @@ public:
     virtual void set_chessman(int x, int y, figure f) = 0;
     virtual void unset_chessman(int x, int y, figure f) = 0;
 
-    virtual bool solution_params() = 0;
+    virtual bool solution_params(int *figures_count) = 0;
 
     virtual i_solution get_solution() = 0;
 

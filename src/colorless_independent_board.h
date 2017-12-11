@@ -22,7 +22,7 @@ public:
 
     void unset_chessman(int x, int y, figure f) override;
 
-    bool solution_params() override;
+    bool solution_params(int *figures_count) override;
 
     i_solution get_solution() override;
 };

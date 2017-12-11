@@ -13,7 +13,7 @@ unsigned long long int recursive_count = 0;
 
 std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
     auto solutions = solve_not_fundamental(f);
-    solutions = i_solution::remove_duplicates(&solutions, board_->solution_params());
+    solutions = i_solution::remove_duplicates(&solutions, board_->solution_params(f.get()));
     std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
     return solutions;
 }

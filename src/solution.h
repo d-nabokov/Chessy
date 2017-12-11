@@ -43,9 +43,9 @@ public:
 //        return os;
 //    }
 
-    bool equal(const solution &other, bool colored) const;
+    bool equal(const solution &other, bool check_colors) const;
 
-    static std::vector<solution> remove_duplicates(std::vector<solution> *l, bool colored);
+    static std::vector<solution> remove_duplicates(std::vector<solution> *l, bool check_colors);
 
     int get_size() const;
 

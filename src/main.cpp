@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
     }
     std::shared_ptr<chessy::board> shr(b);
     chessy::solver solver(shr);
-    auto solutions = solver.solve(pair.first);
+//    auto solutions = solver.solve(pair.first);
+    auto solutions = solver.solve_not_fundamental(pair.first);
 
     for (const auto &s : solutions) {
         i.print_solution(std::cout, s, pair.second == modes::independent);

@@ -1,6 +1,5 @@
 #include <iostream>
 #include "solution.h"
-#include "io_interface.h"
 
 namespace chessy {
 
@@ -10,14 +9,14 @@ void solution<C>::add_figure(const C &x, const C &y, figure f) {
 }
 
 template <class C>
-bool solution<C>::equal(const solution &other, bool colored) const {
+bool solution<C>::equal(const solution &other, bool check_colors) const {
     if (size_ != other.size_) {
         return false;
     }
 
     static const int tr_count = 7;
     static bool transformations[2 * tr_count + 1];
-    int size = colored ? 2 * tr_count + 1 : tr_count;
+    int size = check_colors ? 2 * tr_count + 1 : tr_count;
     for (int i = 0; i < size; ++i) {
         transformations[i] = true;
     }
@@ -47,11 +46,11 @@ bool solution<C>::equal(const solution &other, bool colored) const {
             if (transformations[i] && !find_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
                 transformations[i] = false;
             }
-            if (colored && transformations[i + tr_count] && !find_opposite_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
+            if (check_colors && transformations[i + tr_count] && !find_opposite_figure(tr_coords[2 * i], tr_coords[2 * i + 1], p.second, other)) {
                 transformations[i + tr_count] = false;
             }
         }
-        if (colored && transformations[size - 1] && !find_opposite_figure(c.first, c.second, p.second, other)) {
+        if (check_colors && transformations[size - 1] && !find_opposite_figure(c.first, c.second, p.second, other)) {
             transformations[size - 1] = false;
         }
     }
@@ -65,26 +64,15 @@ bool solution<C>::equal(const solution &other, bool colored) const {
 }
 
 template <class C>
-std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>> *l, bool colored) {
+std::vector<solution<C>> solution<C>::remove_duplicates(std::vector<solution<C>> *l, bool check_colors) {
     std::vector<bool> dupl(l->size(), false);
-
-//    static int count = 0;
 
     for (int i = 0; i + 1 < l->size(); ++i) {
         if (dupl[i]) {
             continue;
         }
         for (int j = i + 1; j < l->size(); ++j) {
-//            ++count;
-//            io_interface inter;
-//            std::cout << "SOLUTION 1\n";
-//            inter.print_solution(std::cout, (*l)[i], true);
-//            std::cout << "SOLUTION 2\n";
-//            inter.print_solution(std::cout, (*l)[j], true);
-//            auto b = (*l)[i].equal((*l)[j], colored);
-//            std::cout << "RESULT = " << b << "\n";
-//            std::cout << "COUNT = " << count << "\n";
-            if ((*l)[i].equal((*l)[j], colored)) {
+            if ((*l)[i].equal((*l)[j], check_colors)) {
                 dupl[j] = true;
             }
         }
