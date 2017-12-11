@@ -2,9 +2,8 @@
 #include <memory>
 #include "io_interface.h"
 #include "solver.h"
-#include "board.h"
-#include "colorless_independent_board.h"
-#include "independent_board.h"
+#include "boards.h"
+
 
 
 int main(int argc, char *argv[]) {
@@ -22,6 +21,9 @@ int main(int argc, char *argv[]) {
         case modes::independent:
             std::cout << "COLORFUL!!\n";
             b = new chessy::independent_board(size);
+            break;
+        case modes::dependent:
+            b = new chessy::dependent_board(size);
             break;
     }
     std::shared_ptr<chessy::board> shr(b);

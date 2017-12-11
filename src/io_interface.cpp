@@ -9,7 +9,7 @@
 namespace chessy {
 
 std::pair<io_interface::i_shared_ptr, modes> io_interface::parse(const std::string &filename) const {
-    i_shared_ptr f;
+    i_shared_ptr ret;
     int * figures;
 
     std::ifstream in(filename);
@@ -18,9 +18,14 @@ std::pair<io_interface::i_shared_ptr, modes> io_interface::parse(const std::stri
     }
 
     bool first_line = true;
-    bool colored;
+    modes m = modes::independent_colorless;
     for (std::string line; std::getline(in, line);) {
         if (line.size() == 0) {
+            continue;
+        }
+
+        if (first_line && line[0] == 'd') {
+            m = modes::dependent;
             continue;
         }
 
@@ -36,28 +41,27 @@ std::pair<io_interface::i_shared_ptr, modes> io_interface::parse(const std::stri
         if (first_line) {
             first_line = false;
             int size;
-            if (l_size == 3) {
-                colored = true;
+            if (l_size >= 3 && m == modes::independent_colorless) {
+                m = modes::independent;
                 size = 2 * CHESSMAN_TYPES;
             } else {
-                colored = false;
                 size = CHESSMAN_TYPES;
             }
 
-            f = i_shared_ptr(new int[size], std::default_delete<int[]>());
-            figures = f.get();
+            ret = i_shared_ptr(new int[size], std::default_delete<int[]>());
+            figures = ret.get();
             std::memset(figures, 0, size * sizeof(*figures));
         }
 
-        if (!((colored && l_size == 3) || (!colored && l_size == 1))) {
+        if (m == modes::independent && l_size < 3) {
             throw std::invalid_argument("Invalid line");
         }
 
         chessman c = chessman_from_char(line[0]);
-        figure fig = colored ? figure(c, color_from_char(line[2])) : figure(c);
-        figures[fig.figure_index()] += count;
+        figure f = m == modes::independent ? figure(c, color_from_char(line[2])) : figure(c);
+        figures[f.figure_index()] += count;
     }
-    return std::make_pair(f, colored ? modes::independent : modes::independent_colorless);
+    return std::make_pair(ret, m);
 }
 
 chessman io_interface::chessman_from_char(char c) const {
@@ -81,7 +85,7 @@ chessman io_interface::chessman_from_char(char c) const {
         case 'p':
             return chessman::pawn;
         default:
-            throw std::logic_error("No such figure");
+            throw std::invalid_argument("No such figure");
     }
 }
 
@@ -94,7 +98,7 @@ color io_interface::color_from_char(char c) const {
         case 'b':
             return color::black;
         default:
-            throw std::logic_error("No such color");
+            throw std::invalid_argument("No such color");
     }
 }
 
