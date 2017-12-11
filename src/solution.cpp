@@ -112,6 +112,11 @@ int solution<C>::get_size() const {
     return size_;
 }
 
+template <class C>
+bool solution<C>::empty() const {
+    return m_.empty();
+}
+
 template class solution<int>;
 
 }

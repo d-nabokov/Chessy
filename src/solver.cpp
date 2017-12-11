@@ -19,10 +19,11 @@ std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
 }
 
 std::vector<solver::i_solution> solver::solve_not_fundamental(const i_shared_ptr &f) {
+    // TODO move reset to board init
     reset();
 
     int *figures_count = f.get();
-    board_->init_indexes(figures_count);
+    board_->init(figures_count);
 
     std::vector<solver::i_solution> solutions;
     recursive_solve(&solutions, 0, figures_count, 0, 0, -1);
@@ -38,7 +39,10 @@ void solver::reset() {
 void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures_count, int prev_index, int prev_x, int prev_y) {
     ++recursive_count;
     if (f_number == board_->figure_count()) {
-        solutions->push_back(board_->get_solution());
+        auto s = board_->get_solution();
+        if (!s.empty()) {
+            solutions->push_back(std::move(s));
+        }
         return;
     }
 

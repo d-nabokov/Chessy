@@ -39,7 +39,7 @@ public:
         return indexes_[indexes_size_ - 1];
     }
 
-    void init_indexes(int *figures_count) {
+    virtual void init(int *figures_count) {
         std::memset(indexes_, 0, indexes_size_ * sizeof(*indexes_));
         int sum = 0;
         for (int i = 0; i < indexes_size_; ++i) {

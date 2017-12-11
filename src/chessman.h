@@ -71,9 +71,7 @@ public:
     }
 
     bool opposite_colors(figure other) const {
-        bool b = (f_ ^ COLOR_MASK) == other.f_;
-        return b;
-//        return (f_ ^ COLOR_MASK) == other.f_;
+        return (f_ ^ COLOR_MASK) == other.f_;
     }
 
     constexpr color get_color() const {

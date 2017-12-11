@@ -49,6 +49,8 @@ public:
 
     int get_size() const;
 
+    bool empty() const;
+
 private:
     map_t m_;
     int size_;
