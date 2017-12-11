@@ -27,7 +27,7 @@ void dominant_board::unset_chessman(int x, int y, figure f) {
 
 }
 
-bool dominant_board::solution_params(int *figures_count) {
+bool dominant_board::solution_params(int *figures_count) const {
     return false;
 }
 

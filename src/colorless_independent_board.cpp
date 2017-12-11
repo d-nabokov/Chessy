@@ -151,7 +151,7 @@ void colorless_independent_board::unset_chessman(int x, int y, figure f) {
     }
 }
 
-bool colorless_independent_board::solution_params(int *figures_count) {
+bool colorless_independent_board::solution_params(int *figures_count) const {
     return false;
 }
 

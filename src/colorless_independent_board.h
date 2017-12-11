@@ -22,7 +22,7 @@ public:
 
     void unset_chessman(int x, int y, figure f) override;
 
-    bool solution_params(int *figures_count) override;
+    bool solution_params(int *figures_count) const override;
 };
 
 
