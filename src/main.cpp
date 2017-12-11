@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include "io_interface.h"
 #include "solver.h"
@@ -7,12 +8,14 @@
 
 
 int main(int argc, char *argv[]) {
-//    if (argc < 3) {
-//        std::cout << "Usage: <input_file> <output_file> [size]\n";
-//    }
-    int size = 3;
+    if (argc < 3) {
+        std::cout << "Usage: <input_file> <output_file> [size]\n";
+        return 1;
+    }
+
+    int size = argc > 3 ? static_cast<int>(std::stoul(argv[3])) : 8;
     chessy::io_interface i;
-    auto pair = i.parse("../src/input");
+    auto pair = i.parse(argv[1]);
     chessy::board *b;
     switch (pair.second) {
         case modes::independent_colorless:
@@ -30,10 +33,11 @@ int main(int argc, char *argv[]) {
     auto solutions = solver.solve(pair.first);
 //    auto solutions = solver.solve_not_fundamental(pair.first);
 
-    for (const auto &s : solutions) {
-        i.print_solution(std::cout, s, pair.second == modes::independent);
-    }
+    std::ofstream of(argv[2]);
 
+    for (const auto &s : solutions) {
+        i.print_solution(of, s, pair.second == modes::independent);
+    }
 
     return 0;
 }
