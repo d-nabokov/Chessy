@@ -151,6 +151,7 @@ void dominant_board::mark_figure(int x, int y, figure f, void (dominant_board::*
                 if (i == x && j == y) {
                     continue;
                 }
+                (this->*func)(cover_field_[i][j]);
             }
         }
     }

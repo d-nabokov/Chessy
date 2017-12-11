@@ -2,3 +2,5 @@ cmake-build-debug
 .idea
 build
 .DS_STORE
+src/input
+src/output

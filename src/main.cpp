@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int size = argc > 3 ? static_cast<int>(std::stoul(argv[3])) : 8;
+    int size = argc > 3 ? static_cast<int>(std::stoul(argv[3])) : 3;
     chessy::io_interface i;
     auto pair = i.parse(argv[1]);
     chessy::board *b;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     std::ofstream of(argv[2]);
 
     for (const auto &s : solutions) {
-        i.print_solution(of, s, pair.second == modes::independent);
+        i.print_solution(std::cout, s, pair.second == modes::independent);
     }
 
     return 0;
