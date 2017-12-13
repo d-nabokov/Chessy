@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int size = argc > 3 ? static_cast<int>(std::stoul(argv[3])) : 3;
+    int size = argc > 3 ? static_cast<int>(std::stoul(argv[3])) : 4;
     chessy::io_interface i;
     auto pair = i.parse(argv[1]);
     chessy::board *b;
