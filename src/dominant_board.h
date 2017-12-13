@@ -32,8 +32,6 @@ public:
 
     i_solution get_solution() override;
 
-    void print();
-
 private:
     int max_weight(figure f) const;
     int even_size() const;

@@ -1,5 +1,4 @@
 #include "dominant_board.h"
-#include <iostream>
 
 namespace chessy {
 
@@ -342,16 +341,6 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
             }
         }
     }
-}
-
-void dominant_board::print() {
-    for (int i = 0; i < size_; ++i) {
-        for (int j = 0; j < size_; ++j) {
-            std::cout << cover_field_[i][j] << " ";
-        }
-        std::cout << "\n";
-    }
-    std::cout << "\n";
 }
 
 }
