@@ -1,4 +1,5 @@
 #include "dominant_board.h"
+#include <iostream>
 
 namespace chessy {
 
@@ -38,6 +39,7 @@ void dominant_board::set_chessman(int x, int y, figure f) {
     field_[x][y] = f;
     potential_ -= max_weight(f);
     mark_figure(x, y, f, &dominant_board::cover);
+    correct_cover(x, y, f, &dominant_board::uncover);
     if (f == chessman::queen || f == chessman::rook) {
         ++horizontal[x];
         ++vertical[y];
@@ -47,13 +49,13 @@ void dominant_board::set_chessman(int x, int y, figure f) {
         ++asc_diagonal[asc_index(x, y)];
         ++desc_diagonal[desc_index(x, y)];
     }
-    correct_cover(x, y, f, &dominant_board::uncover);
 }
 
 void dominant_board::unset_chessman(int x, int y, figure f) {
     field_[x][y] = chessman::empty;
     potential_ += max_weight(f);
     mark_figure(x, y, f, &dominant_board::uncover);
+    correct_cover(x, y, f, &dominant_board::cover);
     if (f == chessman::queen || f == chessman::rook) {
         --horizontal[x];
         --vertical[y];
@@ -63,7 +65,6 @@ void dominant_board::unset_chessman(int x, int y, figure f) {
         --asc_diagonal[asc_index(x, y)];
         --desc_diagonal[desc_index(x, y)];
     }
-    correct_cover(x, y, f, &dominant_board::cover);
 }
 
 bool dominant_board::solution_params(int *figures_count) const {
@@ -234,9 +235,32 @@ board::i_solution dominant_board::get_solution() {
 void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board::*func)(int &cell)) {
     if (horizontal[x] > 0) {
         // try find queen or rook on the right
+        for (int j = y + 1; j < size_; ++j) {
+            // if succeed, correct on the left from current until reach another figure or end
+            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
+                j = y;
+                do {
+                    (this->*func)(cover_field_[x][j]);
+                    --j;
+                } while (j >= 0 && field_[x][j] == chessman::empty);
+                break;
+            }
+        }
+        for (int j = y - 1; j >= 0; --j) {
+            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
+                j = y;
+                do {
+                    (this->*func)(cover_field_[x][j]);
+                    ++j;
+                } while (j < size_ && field_[x][j] == chessman::empty);
+                break;
+            }
+        }
+    }
+
+    if (vertical[y] > 0) {
         for (int i = x + 1; i < size_; ++i) {
             if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
-                // if succeed, correct on the left from current until reach another figure or end
                 i = x;
                 do {
                     (this->*func)(cover_field_[i][y]);
@@ -252,29 +276,6 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
                     (this->*func)(cover_field_[i][y]);
                     ++i;
                 } while (i < size_ && field_[i][y] == chessman::empty);
-                break;
-            }
-        }
-    }
-
-    if (vertical[y] > 0) {
-        for (int j = y + 1; j < size_; ++j) {
-            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
-                j = y;
-                do {
-                    (this->*func)(cover_field_[x][j]);
-                    --j;
-                } while (j >= 0 && field_[x][j] == chessman::empty);
-                break;
-            }
-        }
-        for (int j = y - 1; j >= 0; --j) {
-            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
-                j = x;
-                do {
-                    (this->*func)(cover_field_[x][j]);
-                    ++j;
-                } while (j < size_ && field_[x][j] == chessman::empty);
                 break;
             }
         }
@@ -325,6 +326,16 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
             }
         }
     }
+}
+
+void dominant_board::print() {
+    for (int i = 0; i < size_; ++i) {
+        for (int j = 0; j < size_; ++j) {
+            std::cout << cover_field_[i][j] << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
 }
 
 }
