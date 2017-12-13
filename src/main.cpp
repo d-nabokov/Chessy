@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
     }
     std::shared_ptr<chessy::board> shr(b);
     chessy::solver solver(shr);
-    auto solutions = solver.solve(pair.first);
+    auto solutions = solver.solve_not_fundamental(pair.first);
+//    auto solutions = solver.solve(pair.first);
 
     std::ofstream of(argv[2]);
 
