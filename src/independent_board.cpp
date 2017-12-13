@@ -85,7 +85,7 @@ bool independent_board::check_chessman(int x, int y, figure f, int *figures_coun
                 break;
             }
         }
-        for (int i = 1; x + i < size_ && y >= i; ++i) {
+        for (int i = 1; x >= i && y >= i; ++i) {
             if (field_[x - i][y - i] != chessman::empty) {
                 if (is_attack_each_other(is_qb, field_[x - i][y - i], chessman::queen, chessman::rook)) {
                     return false;
