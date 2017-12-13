@@ -55,7 +55,7 @@ void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_n
         for (; j < size_; ++j) {
             if (board_->check_chessman(i, j, f, figures_count)) {
                 board_->set_chessman(i, j, f);
-//                std::cout << "FIGURE SETTED AT " << i << " " << j << "\n";
+//                std::cout << "FIGURE " << (f.get_chessman() == chessman::queen ? 'Q' : 'P') << " SETTED AT " << i << " " << j << "\n";
 //                dynamic_cast<dominant_board *>(board_.get())->print();
                 recursive_solve(solutions, f_number + 1, figures_count, chessman_index, i, j);
                 board_->unset_chessman(i, j, f);

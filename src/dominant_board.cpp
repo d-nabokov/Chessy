@@ -236,23 +236,27 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
     if (horizontal[x] > 0) {
         // try find queen or rook on the right
         for (int j = y + 1; j < size_; ++j) {
-            // if succeed, correct on the left from current until reach another figure or end
-            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
-                j = y;
-                do {
-                    (this->*func)(cover_field_[x][j]);
-                    --j;
-                } while (j >= 0 && field_[x][j] == chessman::empty);
+            if (field_[x][j] != chessman::empty) {
+                // if succeed, correct on the left from current until reach another figure or end
+                if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
+                    j = y;
+                    do {
+                        (this->*func)(cover_field_[x][j]);
+                        --j;
+                    } while (j >= 0 && field_[x][j] == chessman::empty);
+                }
                 break;
             }
         }
         for (int j = y - 1; j >= 0; --j) {
-            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
-                j = y;
-                do {
-                    (this->*func)(cover_field_[x][j]);
-                    ++j;
-                } while (j < size_ && field_[x][j] == chessman::empty);
+            if (field_[x][j] != chessman::empty) {
+                if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
+                    j = y;
+                    do {
+                        (this->*func)(cover_field_[x][j]);
+                        ++j;
+                    } while (j < size_ && field_[x][j] == chessman::empty);
+                }
                 break;
             }
         }
@@ -260,22 +264,26 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
 
     if (vertical[y] > 0) {
         for (int i = x + 1; i < size_; ++i) {
-            if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
-                i = x;
-                do {
-                    (this->*func)(cover_field_[i][y]);
-                    --i;
-                } while (i >= 0 && field_[i][y] == chessman::empty);
+            if (field_[i][y] != chessman::empty) {
+                if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
+                    i = x;
+                    do {
+                        (this->*func)(cover_field_[i][y]);
+                        --i;
+                    } while (i >= 0 && field_[i][y] == chessman::empty);
+                }
                 break;
             }
         }
         for (int i = x - 1; i >= 0; --i) {
-            if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
-                i = x;
-                do {
-                    (this->*func)(cover_field_[i][y]);
-                    ++i;
-                } while (i < size_ && field_[i][y] == chessman::empty);
+            if (field_[i][y] != chessman::empty) {
+                if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
+                    i = x;
+                    do {
+                        (this->*func)(cover_field_[i][y]);
+                        ++i;
+                    } while (i < size_ && field_[i][y] == chessman::empty);
+                }
                 break;
             }
         }
@@ -283,22 +291,26 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
 
     if (asc_diagonal[asc_index(x, y)] > 0) {
         for (int i = 1; x + i < size_ && y >= i; ++i) {
-            if (field_[x + i][y - i] == chessman::queen || field_[x + i][y - i] == chessman::bishop) {
-                i = 0;
-                do {
-                    (this->*func)(cover_field_[x - i][y + i]);
-                    ++i;
-                } while (x >= i && y + i < size_ && field_[x - i][y + i] == chessman::empty);
+            if (field_[x + i][y - i] != chessman::empty) {
+                if (field_[x + i][y - i] == chessman::queen || field_[x + i][y - i] == chessman::bishop) {
+                    i = 0;
+                    do {
+                        (this->*func)(cover_field_[x - i][y + i]);
+                        ++i;
+                    } while (x >= i && y + i < size_ && field_[x - i][y + i] == chessman::empty);
+                }
                 break;
             }
         }
         for (int i = 1; x >= i && y + i < size_; ++i) {
-            if (field_[x - i][y + i] == chessman::queen || field_[x - i][y + i] == chessman::bishop) {
-                i = 0;
-                do {
-                    (this->*func)(cover_field_[x + i][y - i]);
-                    ++i;
-                } while (x + i < size_ && y >= i && field_[x + i][y - i] == chessman::empty);
+            if (field_[x - i][y + i] != chessman::empty) {
+                if (field_[x - i][y + i] == chessman::queen || field_[x - i][y + i] == chessman::bishop) {
+                    i = 0;
+                    do {
+                        (this->*func)(cover_field_[x + i][y - i]);
+                        ++i;
+                    } while (x + i < size_ && y >= i && field_[x + i][y - i] == chessman::empty);
+                }
                 break;
             }
         }
@@ -306,22 +318,26 @@ void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board:
 
     if (desc_diagonal[desc_index(x, y)] > 0) {
         for (int i = 1; x + i < size_ && y + i < size_; ++i) {
-            if (field_[x + i][y + i] == chessman::queen || field_[x + i][y + i] == chessman::bishop) {
-                i = 0;
-                do {
-                    (this->*func)(cover_field_[x - i][y - i]);
-                    ++i;
-                } while (x >= i && y >= i && field_[x - i][y - i] == chessman::empty);
+            if (field_[x + i][y + i] != chessman::empty) {
+                if (field_[x + i][y + i] == chessman::queen || field_[x + i][y + i] == chessman::bishop) {
+                    i = 0;
+                    do {
+                        (this->*func)(cover_field_[x - i][y - i]);
+                        ++i;
+                    } while (x >= i && y >= i && field_[x - i][y - i] == chessman::empty);
+                }
                 break;
             }
         }
         for (int i = 1; x >= i && y >= i; ++i) {
-            if (field_[x - i][y - i] == chessman::queen || field_[x - i][y - i] == chessman::bishop) {
-                i = 0;
-                do {
-                    (this->*func)(cover_field_[x + i][y + i]);
-                    ++i;
-                } while (x + i < size_ && y + i < size_ && field_[x + i][y + i] == chessman::empty);
+            if (field_[x - i][y - i] != chessman::empty) {
+                if (field_[x - i][y - i] == chessman::queen || field_[x - i][y - i] == chessman::bishop) {
+                    i = 0;
+                    do {
+                        (this->*func)(cover_field_[x + i][y + i]);
+                        ++i;
+                    } while (x + i < size_ && y + i < size_ && field_[x + i][y + i] == chessman::empty);
+                }
                 break;
             }
         }
