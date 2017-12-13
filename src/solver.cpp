@@ -9,17 +9,13 @@ solver::solver(const std::shared_ptr<board> &b)
     size_ = board_->get_size();
 }
 
-unsigned long long int recursive_count = 0;
-
 std::vector<solver::i_solution> solver::solve(const i_shared_ptr &f) {
     auto solutions = solve_not_fundamental(f);
     solutions = i_solution::remove_duplicates(&solutions, board_->solution_params(f.get()));
-    std::cout << "SOLUTIONS SIZE AFTER = " << solutions.size() << "\n";
     return solutions;
 }
 
 std::vector<solver::i_solution> solver::solve_not_fundamental(const i_shared_ptr &f) {
-    // TODO move reset to board init
     reset();
 
     int *figures_count = f.get();
@@ -27,8 +23,6 @@ std::vector<solver::i_solution> solver::solve_not_fundamental(const i_shared_ptr
 
     std::vector<solver::i_solution> solutions;
     recursive_solve(&solutions, 0, figures_count, 0, 0, -1);
-    std::cout << "RECURSIVE CALLS = " << recursive_count << "\n";
-    std::cout << "SOLUTIONS SIZE BEFORE = " << solutions.size() << "\n";
     return solutions;
 }
 
@@ -37,7 +31,6 @@ void solver::reset() {
 }
 
 void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_number, int *figures_count, int prev_index, int prev_x, int prev_y) {
-    ++recursive_count;
     if (f_number == board_->figure_count()) {
         auto s = board_->get_solution();
         if (!s.empty()) {
@@ -45,9 +38,6 @@ void solver::recursive_solve(std::vector<solver::i_solution> *solutions, int f_n
         }
         return;
     }
-
-//    print_debug();
-
 
     int chessman_index = board_->get_next_index(prev_index, f_number);
 

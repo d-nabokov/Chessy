@@ -3,9 +3,8 @@
 
 #include <vector>
 #include <memory>
-#include <iostream>
 #include "chessman.h"
-#include "board.h"
+#include "boards.h"
 #include "solution.h"
 
 namespace chessy {
@@ -20,8 +19,6 @@ public:
     solver(const std::shared_ptr<board> &b);
 
     ~solver() = default;
-
-    unsigned long long int recursive_count = 0;
 
     std::vector<i_solution> solve(const i_shared_ptr &f);
     std::vector<i_solution> solve_not_fundamental(const i_shared_ptr &f);

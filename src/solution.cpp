@@ -1,4 +1,3 @@
-#include <iostream>
 #include "solution.h"
 
 namespace chessy {
@@ -24,8 +23,6 @@ bool solution<C>::equal(const solution &other, bool check_colors) const {
     for (const auto &p : m_) {
         coordinate_t c = p.first;
         int tr_coords[2 * tr_count] = {
-//                // no transformation
-//                c.first, c.second,
                 // 90 rotation
                 size_ - 1 - c.second, c.first,
                 // 180 rotation

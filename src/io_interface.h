@@ -15,7 +15,6 @@ public:
 
     std::pair<i_shared_ptr, modes> parse(const std::string &filename) const;
     void print_solution(std::ostream &os, const i_solution &s, bool colored) const;
-//    void print_debug() const;
 
 private:
     chessman chessman_from_char(char c) const;

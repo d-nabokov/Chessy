@@ -33,16 +33,6 @@ public:
 
     const map_t &get_figures() const;
 
-    // TODO возвращать список координат с фигурой
-//    friend std::ostream &operator<<(std::ostream &os, const solution &s) {
-//        os << "******SOLUTION******\n";
-//        for (const auto &p : s.m) {
-//            coordinate_t coord = p.first;
-//            os << coord.first << " " << coord.second << " " << chessman_out(p.second) << "\n";
-//        }
-//        return os;
-//    }
-
     bool equal(const solution &other, bool check_colors) const;
 
     static std::vector<solution> remove_duplicates(std::vector<solution> *l, bool check_colors);
