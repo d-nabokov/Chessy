@@ -54,7 +54,7 @@ public:
 
 using cib = solutions_helper<chessy::colorless_independent_board>;
 using ib = solutions_helper<chessy::independent_board>;
-
+using db = solutions_helper<chessy::dominant_board>;
 
 namespace board3x3 {
 
@@ -104,6 +104,18 @@ TEST(colorful, test2) {
 }
 
 } // colorful namespace
+
+namespace dominant {
+
+TEST(dominant, test1) {
+    db::assert_solutions_size(4, "dominant/" + test_name(1), 3);
+}
+
+TEST(dominant, test2) {
+    db::assert_solutions_size(3, "dominant/" + test_name(2), 14);
+}
+
+} // dominant namespace
 
 } // namespace
 

@@ -9,6 +9,10 @@ class dominant_board : public board {
     int **cover_field_;
     int uncovered_;
     int potential_;
+    int *horizontal;
+    int *vertical;
+    int *asc_diagonal;
+    int *desc_diagonal;
 public:
     dominant_board(int size);
 
@@ -34,6 +38,7 @@ private:
     void cover(int &cell);
     void uncover(int &cell);
     void mark_figure(int x, int y, figure f, void (dominant_board::*func)(int &cell));
+    void correct_cover(int x, int y, figure f, void (dominant_board::*func)(int &cell));
 };
 
 }

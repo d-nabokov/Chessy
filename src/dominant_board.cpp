@@ -9,10 +9,15 @@ dominant_board::dominant_board(int size)
     for (int i = 0; i < size; ++i) {
         cover_field_[i] = new int[size];
     }
+    horizontal = new int[6 * size - 2];
+    vertical = horizontal + size;
+    asc_diagonal = vertical + size;
+    desc_diagonal = asc_diagonal + (2 * size - 1);
 }
 
 dominant_board::~dominant_board() {
     delete[] cover_field_;
+    delete[] horizontal;
 }
 
 void dominant_board::reset() {
@@ -22,6 +27,7 @@ void dominant_board::reset() {
     }
     potential_ = 0;
     uncovered_ = size_ * size_;
+    std::memset(horizontal, 0, (6 * size_ - 2) * sizeof(*horizontal));
 }
 
 bool dominant_board::check_chessman(int x, int y, figure f, int *figures_count) const {
@@ -32,12 +38,32 @@ void dominant_board::set_chessman(int x, int y, figure f) {
     field_[x][y] = f;
     potential_ -= max_weight(f);
     mark_figure(x, y, f, &dominant_board::cover);
+    if (f == chessman::queen || f == chessman::rook) {
+        ++horizontal[x];
+        ++vertical[y];
+    }
+
+    if (f == chessman::queen || f == chessman::bishop) {
+        ++asc_diagonal[asc_index(x, y)];
+        ++desc_diagonal[desc_index(x, y)];
+    }
+    correct_cover(x, y, f, &dominant_board::uncover);
 }
 
 void dominant_board::unset_chessman(int x, int y, figure f) {
     field_[x][y] = chessman::empty;
     potential_ += max_weight(f);
     mark_figure(x, y, f, &dominant_board::uncover);
+    if (f == chessman::queen || f == chessman::rook) {
+        --horizontal[x];
+        --vertical[y];
+    }
+
+    if (f == chessman::queen || f == chessman::bishop) {
+        --asc_diagonal[asc_index(x, y)];
+        --desc_diagonal[desc_index(x, y)];
+    }
+    correct_cover(x, y, f, &dominant_board::cover);
 }
 
 bool dominant_board::solution_params(int *figures_count) const {
@@ -99,49 +125,56 @@ void dominant_board::mark_figure(int x, int y, figure f, void (dominant_board::*
     (this->*func)(cover_field_[x][y]);
 
     if (f == chessman::queen || f == chessman::rook) {
-        for (int i = 0; i < size_; ++i) {
-            if (i == x) {
-                continue;
+        for (int i = x + 1; i < size_; ++i) {
+            if (field_[i][y] != chessman::empty) {
+                break;
             }
             (this->*func)(cover_field_[i][y]);
         }
-        for (int j = 0; j < size_; ++j) {
-            if (j == y) {
-                continue;
+        for (int i = x - 1; i >= 0; --i) {
+            if (field_[i][y] != chessman::empty) {
+                break;
+            }
+            (this->*func)(cover_field_[i][y]);
+        }
+        for (int j = y + 1; j < size_; ++j) {
+            if (field_[x][j] != chessman::empty) {
+                break;
+            }
+            (this->*func)(cover_field_[x][j]);
+        }
+        for (int j = y - 1; j >= 0; --j) {
+            if (field_[x][j] != chessman::empty) {
+                break;
             }
             (this->*func)(cover_field_[x][j]);
         }
     }
 
     if (f == chessman::queen || f == chessman::bishop) {
-        int top_i, top_j;
-        // ascending diagonal
-        if (x + y < size_) {
-            top_i = 0;
-            top_j = x + y;
-        } else {
-            top_i = x + y + 1 - size_;
-            top_j = size_ - 1;
-        }
-        for (int i = top_i, j = top_j; i < size_ && j >= 0; ++i, --j) {
-            if (i == x && j == y) {
-                continue;
+        for (int i = 1; x + i < size_ && y + i < size_; ++i) {
+            if (field_[x + i][y + i] != chessman::empty) {
+                break;
             }
-            (this->*func)(cover_field_[i][j]);
+            (this->*func)(cover_field_[x + i][y + i]);
         }
-        // descending diagonal
-        if (y >= x) {
-            top_i = 0;
-            top_j = y - x;
-        } else {
-            top_i = x - y;
-            top_j = 0;
-        }
-        for (int i = top_i, j = top_j; i < size_ && j < size_; ++i, ++j) {
-            if (i == x && j == y) {
-                continue;
+        for (int i = 1; x + i < size_ && y >= i; ++i) {
+            if (field_[x + i][y - i] != chessman::empty) {
+                break;
             }
-            (this->*func)(cover_field_[i][j]);
+            (this->*func)(cover_field_[x + i][y - i]);
+        }
+        for (int i = 1; x >= i && y + i < size_; ++i) {
+            if (field_[x - i][y + i] != chessman::empty) {
+                break;
+            }
+            (this->*func)(cover_field_[x - i][y + i]);
+        }
+        for (int i = 1; x >= i && y >= i; ++i) {
+            if (field_[x - i][y - i] != chessman::empty) {
+                break;
+            }
+            (this->*func)(cover_field_[x - i][y - i]);
         }
     }
 
@@ -196,6 +229,102 @@ board::i_solution dominant_board::get_solution() {
         }
     }
     return board::get_solution();
+}
+
+void dominant_board::correct_cover(int x, int y, figure f, void (dominant_board::*func)(int &cell)) {
+    if (horizontal[x] > 0) {
+        // try find queen or rook on the right
+        for (int i = x + 1; i < size_; ++i) {
+            if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
+                // if succeed, correct on the left from current until reach another figure or end
+                i = x;
+                do {
+                    (this->*func)(cover_field_[i][y]);
+                    --i;
+                } while (i >= 0 && field_[i][y] == chessman::empty);
+                break;
+            }
+        }
+        for (int i = x - 1; i >= 0; --i) {
+            if (field_[i][y] == chessman::queen || field_[i][y] == chessman::rook) {
+                i = x;
+                do {
+                    (this->*func)(cover_field_[i][y]);
+                    ++i;
+                } while (i < size_ && field_[i][y] == chessman::empty);
+                break;
+            }
+        }
+    }
+
+    if (vertical[y] > 0) {
+        for (int j = y + 1; j < size_; ++j) {
+            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
+                j = y;
+                do {
+                    (this->*func)(cover_field_[x][j]);
+                    --j;
+                } while (j >= 0 && field_[x][j] == chessman::empty);
+                break;
+            }
+        }
+        for (int j = y - 1; j >= 0; --j) {
+            if (field_[x][j] == chessman::queen || field_[x][j] == chessman::rook) {
+                j = x;
+                do {
+                    (this->*func)(cover_field_[x][j]);
+                    ++j;
+                } while (j < size_ && field_[x][j] == chessman::empty);
+                break;
+            }
+        }
+    }
+
+    if (asc_diagonal[asc_index(x, y)] > 0) {
+        for (int i = 1; x + i < size_ && y >= i; ++i) {
+            if (field_[x + i][y - i] == chessman::queen || field_[x + i][y - i] == chessman::bishop) {
+                i = 0;
+                do {
+                    (this->*func)(cover_field_[x - i][y + i]);
+                    ++i;
+                } while (x >= i && y + i < size_ && field_[x - i][y + i] == chessman::empty);
+                break;
+            }
+        }
+        for (int i = 1; x >= i && y + i < size_; ++i) {
+            if (field_[x - i][y + i] == chessman::queen || field_[x - i][y + i] == chessman::bishop) {
+                i = 0;
+                do {
+                    (this->*func)(cover_field_[x + i][y - i]);
+                    ++i;
+                } while (x + i < size_ && y >= i && field_[x + i][y - i] == chessman::empty);
+                break;
+            }
+        }
+    }
+
+    if (desc_diagonal[desc_index(x, y)] > 0) {
+        for (int i = 1; x + i < size_ && y + i < size_; ++i) {
+            if (field_[x + i][y + i] == chessman::queen || field_[x + i][y + i] == chessman::bishop) {
+                i = 0;
+                do {
+                    (this->*func)(cover_field_[x - i][y - i]);
+                    ++i;
+                } while (x >= i && y >= i && field_[x - i][y - i] == chessman::empty);
+                break;
+            }
+        }
+        for (int i = 1; x >= i && y >= i; ++i) {
+            if (field_[x - i][y - i] == chessman::queen || field_[x - i][y - i] == chessman::bishop) {
+                i = 0;
+                do {
+                    (this->*func)(cover_field_[x + i][y + i]);
+                    ++i;
+                } while (x + i < size_ && y + i < size_ && field_[x + i][y + i] == chessman::empty);
+                break;
+            }
+        }
+    }
 }
 
 }
