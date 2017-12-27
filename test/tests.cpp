@@ -8,6 +8,11 @@
 
 namespace {
 
+template <typename T, unsigned size>
+unsigned arraysize(const T (&v)[size]) {
+    return size;
+}
+
 std::string test_name(unsigned n) {
     if (n >= 1000) {
         return "";
@@ -56,23 +61,35 @@ using cib = solutions_helper<chessy::colorless_independent_board>;
 using ib = solutions_helper<chessy::independent_board>;
 using db = solutions_helper<chessy::dominant_board>;
 
-namespace board3x3 {
+namespace ic_borderline {
 
-TEST(board3x3, test1) {
-    int solutions[] = {2, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0, 1};
-    for (int i = 1; i < 14; ++i) {
-        cib::assert_solutions_size(3, "3x3/" + test_name(i), solutions[i - 1]);
+TEST(ic_borderline, test1) {
+    int solutions[] = {2, 0, 1, 0, 2, 0, 2, 0, 1, 0, 1, 0};
+    for (int i = 1; i < arraysize(solutions) + 1; ++i) {
+        cib::assert_solutions_size(3, "ic_borderline/" + test_name(i), solutions[i - 1]);
     }
 }
 
 
-} // board3x3 namespace
+} // ic_borderline namespace
+
+namespace ic_combinations {
+
+TEST(ic_combinations, test1) {
+    int solutions[] = {1, 1, 7, 1};
+    for (int i = 1; i < arraysize(solutions) + 1; ++i) {
+        cib::assert_solutions_size(3, "ic_combinations/" + test_name(i), solutions[i - 1]);
+    }
+}
+
+
+} // ic_combinations namespace
 
 namespace queens {
 
 TEST(queens, test1) {
     int solutions[] = {2, 1, 6, 12};
-    for (int i = 1; i < 4; ++i) {
+    for (int i = 1; i < arraysize(solutions) + 1; ++i) {
         int n = i + 4;
         cib::assert_solutions_size(n, "queens/" + test_name(i), solutions[i - 1]);
     }
@@ -103,16 +120,33 @@ TEST(colorful, test2) {
     ib::assert_not_fundamental_solutions_size(3, "colorful/" + test_name(2), 18);
 }
 
+TEST(colorful, test3) {
+    unsigned fs = 38, nfs = 252;
+    ib::assert_solutions_size(3, "colorful/" + test_name(3), fs);
+    ib::assert_not_fundamental_solutions_size(3, "colorful/" + test_name(3), nfs);
+
+    ib::assert_solutions_size(3, "colorful/" + test_name(4), fs);
+    ib::assert_not_fundamental_solutions_size(3, "colorful/" + test_name(4), nfs);
+}
+
+TEST(colorful, test4) {
+    ib::assert_solutions_size(3, "colorful/" + test_name(5), 9);
+}
+
+TEST(colorful, test5) {
+    ib::assert_solutions_size(3, "colorful/" + test_name(6), 5);
+}
+
 } // colorful namespace
 
 namespace dominant {
 
 TEST(dominant, test1) {
-    db::assert_solutions_size(4, "dominant/" + test_name(1), 3);
-}
-
-TEST(dominant, test2) {
-    db::assert_solutions_size(3, "dominant/" + test_name(2), 14);
+    int solutions[] = {3, 14, 1, 3};
+    int size[] = {4, 3, 4, 4};
+    for (int i = 1; i < arraysize(solutions) + 1; ++i) {
+        db::assert_solutions_size(size[i - 1], "dominant/" + test_name(i), solutions[i - 1]);
+    }
 }
 
 } // dominant namespace
